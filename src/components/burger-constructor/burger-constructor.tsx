@@ -1,7 +1,6 @@
 import { FC, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { BurgerConstructorUI } from '@ui';
-import { TConstructorIngredient } from '@utils-types';
 import {
   clearConstructor,
   selectConstructorBun,
@@ -33,7 +32,7 @@ export const BurgerConstructor: FC = () => {
 
     const ingredientIds = [
       bun._id,
-      ...ingredients.map((item: TConstructorIngredient) => item._id),
+      ...ingredients.map((item) => item._id),
       bun._id
     ];
 
@@ -47,13 +46,9 @@ export const BurgerConstructor: FC = () => {
   const price = useMemo(
     () =>
       (bun ? bun.price * 2 : 0) +
-      ingredients.reduce(
-        (sum: number, item: TConstructorIngredient) => sum + item.price,
-        0
-      ),
+      ingredients.reduce<number>((sum, item) => sum + item.price, 0),
     [bun, ingredients]
   );
-
   return (
     <BurgerConstructorUI
       price={price}
