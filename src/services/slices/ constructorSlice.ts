@@ -20,7 +20,10 @@ export const constructorSlice = createSlice({
       if (action.payload.type === 'bun') {
         state.bun = action.payload;
       } else {
-        state.ingredients.push(action.payload);
+        state.ingredients.push({
+          ...action.payload,
+          uuid: crypto.randomUUID()
+        });
       }
     },
     removeIngredient: (state, action: PayloadAction<number>) => {
@@ -48,8 +51,8 @@ export const {
   clearConstructor
 } = constructorSlice.actions;
 
-export default constructorSlice.reducer;
-
 export const selectConstructorIngredients = (state: RootState) =>
   state.constructor.ingredients;
 export const selectConstructorBun = (state: RootState) => state.constructor.bun;
+
+export default constructorSlice.reducer;

@@ -1,4 +1,5 @@
 import { Middleware } from 'redux';
+import { RootState, AppDispatch } from '../store';
 import {
   ConnectionStart,
   ConnectionSuccess,
@@ -7,27 +8,37 @@ import {
   GetMessage
 } from '../slices/feedSlice';
 
-export const socketMiddleware = (): Middleware => {
+export const socketMiddleware = (): Middleware<{}, RootState> => {
   return (store) => {
     let socket: WebSocket | null = null;
 
     return (next) => (action) => {
-      const { dispatch } = store;
-      const { type, payload } = action;
+      const { dispatch } = store as { dispatch: AppDispatch };
 
-      if (type === ConnectionStart.type) {
-        socket = new WebSocket(payload);
+      if (ConnectionStart.match(action)) {
+        socket = new WebSocket(action.payload);
       }
 
       if (socket) {
-        socket.onopen = () => dispatch(ConnectionSuccess());
-        socket.onerror = (event) => dispatch(ConnectionError(event.type));
-        socket.onclose = () => dispatch(ConnectionClosed());
+        socket.onopen = () => {
+          dispatch(ConnectionSuccess());
+        };
+
+        socket.onerror = (event) => {
+          dispatch(ConnectionError('WebSocket error'));
+        };
+
+        socket.onclose = () => {
+          dispatch(ConnectionClosed());
+        };
+
         socket.onmessage = (event) => {
-          const data = JSON.parse(event.data);
-          dispatch(GetMessage(data));
+          const { data } = event;
+          const parsedData = JSON.parse(data);
+          dispatch(GetMessage(parsedData));
         };
       }
+
       next(action);
     };
   };

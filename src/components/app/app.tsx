@@ -22,15 +22,15 @@ const App = () => {
   const dispatch = useDispatch();
   const location = useLocation();
   const background = location.state?.background;
+  const navigate = useNavigate();
 
   useEffect(() => {
     dispatch(checkUserAuth());
-  }, [dispatch])
+  }, [dispatch]);
 
-  const navigate = useNavigate();
   const handleModalClose = () => {
     navigate(-1);
-  }
+  };
 
   return (
     <div className={styles.app}>
@@ -38,11 +38,25 @@ const App = () => {
       <Routes location={background || location}>
         <Route path='/' element={<ConstructorPage />} />
         <Route path='/feed' element={<Feed />} />
-        <Route path='/login' element={<ProtectedRoute onlyUnAuth><Login /></ProtectedRoute>} />
+        <Route
+          path='/login'
+          element={
+            <ProtectedRoute onlyUnAuth>
+              <Login />
+            </ProtectedRoute>
+          }
+        />
         <Route path='/register' element={<Register />} />
         <Route path='/forgot-password' element={<ForgotPassword />} />
         <Route path='/reset-password' element={<ResetPassword />} />
-        <Route path='/profile' element={<ProtectedRoute><Profile /></ProtectedRoute>}>
+        <Route
+          path='/profile'
+          element={
+            <ProtectedRoute>
+              <Profile />
+            </ProtectedRoute>
+          }
+        />
         <Route path='/profile/orders' element={<ProfileOrders />} />
         <Route path='*' element={<NotFound404 />} />
       </Routes>
@@ -76,6 +90,6 @@ const App = () => {
       )}
     </div>
   );
-}
+};
 
 export default App;
