@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import { orderBurgerApi } from '../../utils/burger-api';
 import { TOrder } from '@utils-types';
 import { RootState } from '../store';
@@ -41,10 +41,13 @@ export const orderSlice = createSlice({
         state.orderRequest = true;
         state.error = null;
       })
-      .addCase(createOrder.fulfilled, (state, action) => {
-        state.orderRequest = false;
-        state.orderModalData = action.payload;
-      })
+      .addCase(
+        createOrder.fulfilled,
+        (state, action: PayloadAction<TOrder>) => {
+          state.orderRequest = false;
+          state.orderModalData = action.payload;
+        }
+      )
       .addCase(createOrder.rejected, (state, action) => {
         state.orderRequest = false;
         state.error = action.error.message || 'Ошибка при созданий заказа';

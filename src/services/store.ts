@@ -1,6 +1,6 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
-import ingredientsReducer from './slices/ingredientsSlice';
+import ingredientsReducer from '../services/slices/ingredientsSlice';
 import orderReducer from './slices/orderSlice';
 import authReducer from './slices/authSlice';
 import constructorReducer from './slices/constructorSlice';
