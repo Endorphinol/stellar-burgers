@@ -1,6 +1,6 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import { getOrdersApi } from '../../utils/burger-api';
-import { TOrder } from '../../utils/types';
+import { TOrder, TOrdersData } from '../../utils/types';
 import { RootState } from '../store';
 
 type TProfileOrdersState = {
@@ -33,20 +33,20 @@ export const profileOrdersSlice = createSlice({
   name: 'profileOrders',
   initialState,
   reducers: {
-    ConnectionStart: (state, action) => {
+    wsConnectionStart: (state, action: PayloadAction<string>) => {
       state.wsConnected = true;
     },
-    ConnectionSuccess: (state) => {
+    wsConnectionSuccess: (state) => {
       state.wsConnected = true;
     },
-    ConnectionError: (state, action) => {
+    wsConnectionError: (state, action: PayloadAction<string>) => {
       state.wsConnected = false;
       state.error = action.payload;
     },
-    ConnectionClosed: (state) => {
+    wsConnectionClosed: (state) => {
       state.wsConnected = false;
     },
-    GetMessage: (state, action) => {
+    wsGetMessage: (state, action: PayloadAction<TOrdersData>) => {
       state.orders = action.payload.orders;
     }
   },
@@ -68,11 +68,11 @@ export const profileOrdersSlice = createSlice({
 });
 
 export const {
-  ConnectionStart,
-  ConnectionSuccess,
-  ConnectionError,
-  ConnectionClosed,
-  GetMessage
+  wsConnectionStart,
+  wsConnectionSuccess,
+  wsConnectionError,
+  wsConnectionClosed,
+  wsGetMessage
 } = profileOrdersSlice.actions;
 
 export const selectProfileOrders = (state: RootState) =>

@@ -6,12 +6,14 @@ type TOrderState = {
   orderRequest: boolean;
   orderModalData: { number: number } | null;
   error: string | null;
+  isOrderLoading: boolean;
 };
 
 export const initialState: TOrderState = {
   orderRequest: false,
   orderModalData: null,
-  error: null
+  error: null,
+  isOrderLoading: false
 };
 
 export const createOrder = createAsyncThunk(
@@ -37,15 +39,15 @@ export const orderSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(createOrder.pending, (state) => {
-        state.orderRequest = true;
+        state.isOrderLoading = true;
         state.error = null;
       })
       .addCase(createOrder.fulfilled, (state, action) => {
-        state.orderRequest = false;
+        state.isOrderLoading = false;
         state.orderModalData = action.payload.order;
       })
       .addCase(createOrder.rejected, (state, action) => {
-        state.orderRequest = false;
+        state.isOrderLoading = false;
         state.error = action.error.message || 'Ошибка при создании заказа';
       });
   }

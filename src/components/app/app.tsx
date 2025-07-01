@@ -15,8 +15,8 @@ import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 import { AppHeader, IngredientDetails, Modal, OrderInfo } from '@components';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
-import { checkUserAuth } from 'src/services/slices/authSlice';
-import { ProtectedRoute } from 'src/services/protected-route';
+import { selectUser, checkUserAuth } from '../../services/slices/authSlice';
+import { ProtectedRoute } from '../../services/protected-route';
 
 const App = () => {
   const dispatch = useDispatch();
