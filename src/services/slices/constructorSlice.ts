@@ -54,10 +54,8 @@ export const {
   moveIngredient,
   clearConstructor
 } = constructorSlice.actions;
-
 export const selectConstructorIngredients = (state: RootState) =>
   state.constructor.ingredients;
 export const selectConstructorBun = (state: RootState) => state.constructor.bun;
 export const selectConstructorItems = (state: RootState) => state.constructor;
-
 export default constructorSlice.reducer;

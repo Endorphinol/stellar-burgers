@@ -7,14 +7,14 @@ type TProfileOrdersState = {
   orders: TOrder[];
   isLoading: boolean;
   error: string | null;
-  wsConnected: boolean;
+  Connected: boolean;
 };
 
 export const initialState: TProfileOrdersState = {
   orders: [],
   isLoading: false,
   error: null,
-  wsConnected: false
+  Connected: false
 };
 
 export const fetchProfileOrders = createAsyncThunk(
@@ -34,17 +34,17 @@ export const profileOrdersSlice = createSlice({
   initialState,
   reducers: {
     ConnectionStart: (state, action: PayloadAction<string>) => {
-      state.wsConnected = true;
+      state.Connected = true;
     },
     ConnectionSuccess: (state) => {
-      state.wsConnected = true;
+      state.Connected = true;
     },
     ConnectionError: (state, action: PayloadAction<string>) => {
-      state.wsConnected = false;
+      state.Connected = false;
       state.error = action.payload;
     },
     ConnectionClosed: (state) => {
-      state.wsConnected = false;
+      state.Connected = false;
     },
     GetMessage: (state, action: PayloadAction<TOrdersData>) => {
       state.orders = action.payload.orders;
@@ -74,7 +74,6 @@ export const {
   ConnectionClosed,
   GetMessage
 } = profileOrdersSlice.actions;
-
 export const selectProfileOrders = (state: RootState) =>
   state.profileOrders.orders;
 export default profileOrdersSlice.reducer;

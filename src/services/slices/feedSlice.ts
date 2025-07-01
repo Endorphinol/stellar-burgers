@@ -75,5 +75,4 @@ export const {
   ConnectionClosed,
   GetMessage
 } = feedSlice.actions;
-
 export default feedSlice.reducer;
