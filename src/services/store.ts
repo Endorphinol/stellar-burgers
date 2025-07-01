@@ -3,6 +3,7 @@ import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 import ingredientsReducer from './slices/ingredientsSlice';
 import orderReducer from './slices/orderSlice';
 import authReducer from './slices/authSlice';
+import constructorReducer from './slices/constructorSlice';
 import feedReducer from './slices/feedSlice';
 import profileOrdersReducer from './slices/profileOrdersSlice';
 import { socketMiddleware } from './middleware/socketMiddleware';
@@ -12,7 +13,8 @@ const rootReducer = combineReducers({
   order: orderReducer,
   auth: authReducer,
   feed: feedReducer,
-  profileOrders: profileOrdersReducer
+  profileOrders: profileOrdersReducer,
+  constructor: constructorReducer
 });
 
 export const store = configureStore({
