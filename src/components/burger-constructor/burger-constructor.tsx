@@ -3,8 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { BurgerConstructorUI } from '@ui';
 import { TConstructorIngredient, TOrder } from '@utils-types';
 import {
-  selectConstructor,
-  clearConstructor
+  clearConstructor,
+  selectConstructor
 } from '../../services/slices/constructorSlice';
 import { selectUser } from '../../services/slices/authSlice';
 import { createOrder } from '../../services/slices/orderSlice';
@@ -13,14 +13,16 @@ import { useAppDispatch, useAppSelector } from '../../services/store';
 export const BurgerConstructor: FC = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  
+
   const { bun, ingredients } = useAppSelector(selectConstructor);
   const user = useAppSelector(selectUser);
-  const { orderRequest, orderModalData } = useAppSelector((state) => state.order);
+  const { orderRequest, orderModalData } = useAppSelector(
+    (state) => state.order
+  );
 
   const handleOrderClick = () => {
     if (!bun || orderRequest) return;
-    
+
     if (!user) {
       navigate('/login', { state: { from: '/' } });
       return;
@@ -28,7 +30,7 @@ export const BurgerConstructor: FC = () => {
 
     const ingredientIds = [
       bun._id,
-      ...ingredients.map((item) => item._id),
+      ...ingredients.map((item: TConstructorIngredient) => item._id),
       bun._id
     ];
 
@@ -36,33 +38,24 @@ export const BurgerConstructor: FC = () => {
       .unwrap()
       .then(() => {
         dispatch(clearConstructor());
-      })
-      .catch((err) => {
-        console.error('Failed to create order:', err);
       });
   };
 
-  const handleCloseModal = () => {
-    dispatch(clearConstructor());
-  };
-
-  const totalPrice = useMemo(() => {
-    const bunPrice = bun ? bun.price * 2 : 0;
-    const ingredientsPrice = ingredients.reduce(
-      (sum, item) => sum + item.price,
-      0
-    );
-    return bunPrice + ingredientsPrice;
-  }, [bun, ingredients]);
+  const price = useMemo(
+    () =>
+      (bun ? bun.price * 2 : 0) +
+      ingredients.reduce((sum, item) => sum + item.price, 0),
+    [bun, ingredients]
+  );
 
   return (
     <BurgerConstructorUI
-      price={totalPrice}
+      price={price}
       orderRequest={orderRequest}
       constructorItems={{ bun, ingredients }}
       orderModalData={orderModalData}
       onOrderClick={handleOrderClick}
-      closeOrderModal={handleCloseModal}
+      closeOrderModal={() => dispatch(clearConstructor())}
     />
   );
 };
