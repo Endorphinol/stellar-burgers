@@ -1,7 +1,9 @@
 import { ProfileUI } from '@ui-pages';
 import { FC, SyntheticEvent, useEffect, useState } from 'react';
+import { useAppSelector, useAppDispatch } from '../../services/store';
+import { selectUser, updateUser } from '../../services/slices/authSlice';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectUser } from 'src/services/slices/authSlice';
+import { updateUserApi } from '@api';
 
 export const Profile: FC = () => {
   const dispatch = useDispatch();
@@ -27,6 +29,9 @@ export const Profile: FC = () => {
 
   const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
+    if (user) {
+      dispatch(updateUserApi(formValue));
+    }
   };
 
   const handleCancel = (e: SyntheticEvent) => {
@@ -54,6 +59,4 @@ export const Profile: FC = () => {
       handleInputChange={handleInputChange}
     />
   );
-
-  return null;
 };

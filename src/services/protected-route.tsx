@@ -1,7 +1,8 @@
 import { FC } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
-import { useSelector } from '../services/store';
+import { useAppSelector } from '../services/store';
 import { selectUser } from '../services/slices/authSlice';
+import { useSelector } from 'react-redux';
 
 interface IProtectedRoute {
   onlyUnAuth?: boolean;

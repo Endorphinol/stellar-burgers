@@ -33,20 +33,20 @@ export const profileOrdersSlice = createSlice({
   name: 'profileOrders',
   initialState,
   reducers: {
-    wsConnectionStart: (state, action) => {
+    ConnectionStart: (state, action) => {
       state.wsConnected = true;
     },
-    wsConnectionSuccess: (state) => {
+    ConnectionSuccess: (state) => {
       state.wsConnected = true;
     },
-    wsConnectionError: (state, action) => {
+    ConnectionError: (state, action) => {
       state.wsConnected = false;
       state.error = action.payload;
     },
-    wsConnectionClosed: (state) => {
+    ConnectionClosed: (state) => {
       state.wsConnected = false;
     },
-    wsGetMessage: (state, action) => {
+    GetMessage: (state, action) => {
       state.orders = action.payload.orders;
     }
   },
@@ -68,11 +68,11 @@ export const profileOrdersSlice = createSlice({
 });
 
 export const {
-  wsConnectionStart,
-  wsConnectionSuccess,
-  wsConnectionError,
-  wsConnectionClosed,
-  wsGetMessage
+  ConnectionStart,
+  ConnectionSuccess,
+  ConnectionError,
+  ConnectionClosed,
+  GetMessage
 } = profileOrdersSlice.actions;
 
 export const selectProfileOrders = (state: RootState) =>

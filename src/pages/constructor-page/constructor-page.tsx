@@ -1,4 +1,4 @@
-import { useDispatch, useSelector } from '../../services/store';
+import { useAppDispatch, useAppSelector } from '../../services/store';
 
 import styles from './constructor-page.module.css';
 import { BurgerIngredients } from '../../components';
@@ -6,38 +6,35 @@ import { BurgerConstructor } from '../../components';
 import { Preloader } from '../../components/ui';
 import { FC, useEffect } from 'react';
 import { fetchIngredients } from 'src/services/slices/ingredientsSlice';
+import { useDispatch, useSelector } from 'react-redux';
 
 export const ConstructorPage: FC = () => {
-  const dispatch = useDispatch();
-  const { items, isLoading, error } = useSelector((state) => state.ingredients);
-  const { isOrderLoading } = useSelector((state) => state.order);
+  const dispatch = useAppDispatch();
+  const { items, isLoading, error } = useAppSelector(
+    (state) => state.ingredients
+  );
+  const { isOrderLoading } = useAppSelector((state) => state.order);
 
   useEffect(() => {
     if (!items.length) {
       dispatch(fetchIngredients());
     }
   }, [dispatch, items]);
-  
-  if (isLoading) return <div>Загрузка...</div>;
+
+  if (isLoading) return <Preloader />;
   if (error) return <div>Ошибка: {error}</div>;
 
   return (
-    <>
-      {isIngredientsLoading ? (
-        <Preloader />
-      ) : (
-        <main className={styles.containerMain}>
-          <h1
-            className={`${styles.title} text text_type_main-large mt-10 mb-5 pl-5`}
-          >
-            Соберите бургер
-          </h1>
-          <div className={`${styles.main} pl-5 pr-5`}>
-            <BurgerIngredients />
-            <BurgerConstructor />
-          </div>
-        </main>
-      )}
-    </>
+    <main className={styles.containerMain}>
+      <h1
+        className={`${styles.title} text text_type_main-large mt-10 mb-5 pl-5`}
+      >
+        Соберите бургер
+      </h1>
+      <div className={`${styles.main} pl-5 pr-5`}>
+        <BurgerIngredients />
+        <BurgerConstructor />
+      </div>
+    </main>
   );
 };
