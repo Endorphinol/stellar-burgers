@@ -8,13 +8,16 @@ import {
 } from '../../services/slices/constructorSlice';
 import { selectUser } from '../../services/slices/authSlice';
 import { createOrder } from '../../services/slices/orderSlice';
-import { useAppDispatch, useAppSelector } from '../../services/store';
+import { RootState, useAppDispatch, useAppSelector } from '../../services/store';
 
 export const BurgerConstructor: FC = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  const { bun, ingredients } = useAppSelector(selectConstructor);
+  const { bun, ingredients } = useAppSelector(
+    (state: RootState) => state.constructor
+  );
+  
   const user = useAppSelector(selectUser);
   const { orderRequest, orderModalData } = useAppSelector(
     (state) => state.order

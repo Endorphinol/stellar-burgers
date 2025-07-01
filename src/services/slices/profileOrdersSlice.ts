@@ -1,6 +1,6 @@
+import { TOrder, TOrdersData } from '@utils-types';
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import { getOrdersApi } from '../../utils/burger-api';
-import { TOrder, TOrdersData } from '../../utils-types';
 import { RootState } from '../store';
 
 type TProfileOrdersState = {
@@ -46,8 +46,8 @@ export const profileOrdersSlice = createSlice({
     connectionClosed: (state) => {
       state.isConnected = false;
     },
-    getMessage: (state, action: PayloadAction<TOrdersData>) => {
-      state.orders = action.payload.orders;
+    getMessage: (state, action: PayloadAction<TOrder[]>) => {
+      state.orders = action.payload;
     }
   },
   extraReducers: (builder) => {
