@@ -1,20 +1,20 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import { getOrdersApi } from '../../utils/burger-api';
-import { TOrder, TOrdersData } from '../../utils/types';
+import { TOrder, TOrdersData } from '../../utils-types';
 import { RootState } from '../store';
 
 type TProfileOrdersState = {
   orders: TOrder[];
   isLoading: boolean;
   error: string | null;
-  Connected: boolean;
+  isConnected: boolean;
 };
 
-export const initialState: TProfileOrdersState = {
+const initialState: TProfileOrdersState = {
   orders: [],
   isLoading: false,
   error: null,
-  Connected: false
+  isConnected: false
 };
 
 export const fetchProfileOrders = createAsyncThunk(
@@ -33,20 +33,20 @@ export const profileOrdersSlice = createSlice({
   name: 'profileOrders',
   initialState,
   reducers: {
-    ConnectionStart: (state, action: PayloadAction<string>) => {
-      state.Connected = true;
+    connectionStart: (state) => {
+      state.isConnected = true;
     },
-    ConnectionSuccess: (state) => {
-      state.Connected = true;
+    connectionSuccess: (state) => {
+      state.isConnected = true;
     },
-    ConnectionError: (state, action: PayloadAction<string>) => {
-      state.Connected = false;
+    connectionError: (state, action: PayloadAction<string>) => {
+      state.isConnected = false;
       state.error = action.payload;
     },
-    ConnectionClosed: (state) => {
-      state.Connected = false;
+    connectionClosed: (state) => {
+      state.isConnected = false;
     },
-    GetMessage: (state, action: PayloadAction<TOrdersData>) => {
+    getMessage: (state, action: PayloadAction<TOrdersData>) => {
       state.orders = action.payload.orders;
     }
   },
@@ -62,18 +62,24 @@ export const profileOrdersSlice = createSlice({
       })
       .addCase(fetchProfileOrders.rejected, (state, action) => {
         state.isLoading = false;
-        state.error = action.error.message || 'Ошибка при загрузке заказов';
+        state.error = action.error.message || 'Failed to fetch orders';
       });
   }
 });
 
 export const {
-  ConnectionStart,
-  ConnectionSuccess,
-  ConnectionError,
-  ConnectionClosed,
-  GetMessage
+  connectionStart,
+  connectionSuccess,
+  connectionError,
+  connectionClosed,
+  getMessage
 } = profileOrdersSlice.actions;
-export const selectProfileOrders = (state: RootState) =>
-  state.profileOrders.orders;
+
+export const selectProfileOrders = (state: RootState) => state.profileOrders.orders;
+export const selectProfileOrdersStatus = (state: RootState) => ({
+  isLoading: state.profileOrders.isLoading,
+  error: state.profileOrders.error,
+  isConnected: state.profileOrders.isConnected
+});
+
 export default profileOrdersSlice.reducer;

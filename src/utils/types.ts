@@ -26,6 +26,7 @@ export type TOrder = {
   updatedAt: string;
   number: number;
 };
+
 export type TOrdersData = {
   orders: TOrder[];
   total: number;

@@ -30,16 +30,18 @@ export const constructorSlice = createSlice({
         });
       }
     },
-    removeIngredient: (state, action: PayloadAction<number>) => {
-      state.ingredients.splice(action.payload, 1);
+    removeIngredient: (state, action: PayloadAction<string>) => {
+      state.ingredients = state.ingredients.filter(
+        (item) => item.uuid !== action.payload
+      );
     },
     moveIngredient: (
       state,
-      action: PayloadAction<{ from: number; to: number }>
+      action: PayloadAction<{ fromIndex: number; toIndex: number }>
     ) => {
-      const { from, to } = action.payload;
-      const [removed] = state.ingredients.splice(from, 1);
-      state.ingredients.splice(to, 0, removed);
+      const { fromIndex, toIndex } = action.payload;
+      const [removed] = state.ingredients.splice(fromIndex, 1);
+      state.ingredients.splice(toIndex, 0, removed);
     },
     clearConstructor: (state) => {
       state.bun = null;
@@ -54,8 +56,10 @@ export const {
   moveIngredient,
   clearConstructor
 } = constructorSlice.actions;
+
+export const selectConstructor = (state: RootState) => state.constructor;
+export const selectConstructorBun = (state: RootState) => state.constructor.bun;
 export const selectConstructorIngredients = (state: RootState) =>
   state.constructor.ingredients;
-export const selectConstructorBun = (state: RootState) => state.constructor.bun;
-export const selectConstructorItems = (state: RootState) => state.constructor;
+
 export default constructorSlice.reducer;
