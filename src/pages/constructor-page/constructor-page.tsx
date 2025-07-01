@@ -1,5 +1,4 @@
 import { useAppDispatch, useAppSelector } from '../../services/store';
-
 import styles from './constructor-page.module.css';
 import { BurgerIngredients } from '../../components';
 import { BurgerConstructor } from '../../components';
@@ -12,7 +11,6 @@ export const ConstructorPage: FC = () => {
   const { items, isLoading, error } = useAppSelector(
     (state) => state.ingredients
   );
-  const { isOrderLoading } = useAppSelector((state) => state.order);
 
   useEffect(() => {
     if (!items.length) {
