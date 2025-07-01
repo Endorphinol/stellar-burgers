@@ -14,14 +14,13 @@ import {
 import '../../index.css';
 import styles from './app.module.css';
 import { AppHeader, IngredientDetails, Modal, OrderInfo } from '@components';
-import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
-import { selectUser, checkUserAuth } from '../../services/slices/authSlice';
+import { checkUserAuth } from '../../services/slices/authSlice';
 import { ProtectedRoute } from '../../services/protected-route';
-import { AppDispatch } from '../../services/store';
+import { useAppDispatch } from '../../services/store';
 
 const App: FC = () => {
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
   const location = useLocation();
   const background = location.state?.background;
   const navigate = useNavigate();
