@@ -1,5 +1,5 @@
-import { Middleware } from 'redux';
-import { RootState, AppDispatch } from '../store';
+import { Middleware, MiddlewareAPI } from 'redux';
+import { AppDispatch, RootState } from '../store';
 import {
   ConnectionStart,
   ConnectionSuccess,
@@ -8,12 +8,12 @@ import {
   GetMessage
 } from '../slices/feedSlice';
 
-export const socketMiddleware = (): Middleware<{}, RootState> => {
-  return (store) => {
+export const socketMiddleware =
+  (): Middleware => (store: MiddlewareAPI<AppDispatch, RootState>) => {
     let socket: WebSocket | null = null;
 
     return (next) => (action) => {
-      const { dispatch } = store as { dispatch: AppDispatch };
+      const { dispatch } = store;
 
       if (ConnectionStart.match(action)) {
         socket = new WebSocket(action.payload);
@@ -25,7 +25,7 @@ export const socketMiddleware = (): Middleware<{}, RootState> => {
         };
 
         socket.onerror = (event) => {
-          dispatch(ConnectionError('WebSocket error'));
+          dispatch(ConnectionError(event.type));
         };
 
         socket.onclose = () => {
@@ -42,4 +42,3 @@ export const socketMiddleware = (): Middleware<{}, RootState> => {
       next(action);
     };
   };
-};

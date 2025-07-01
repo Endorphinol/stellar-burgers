@@ -131,3 +131,4 @@ export const selectIsAuthChecked = (state: RootState) =>
 export const selectAuthLoading = (state: RootState) => state.auth.isLoading;
 export const selectAuthError = (state: RootState) => state.auth.error;
 export default authSlice.reducer;
+

@@ -10,13 +10,14 @@ import { fetchIngredients } from 'src/services/slices/ingredientsSlice';
 export const ConstructorPage: FC = () => {
   const dispatch = useDispatch();
   const { items, isLoading, error } = useSelector((state) => state.ingredients);
-  /** TODO: взять переменную из стора */
-  const isIngredientsLoading = false;
+  const { isOrderLoading } = useSelector((state) => state.order);
 
   useEffect(() => {
-    dispatch(fetchIngredients());
-  }, [dispatch]);
-
+    if (!items.length) {
+      dispatch(fetchIngredients());
+    }
+  }, [dispatch, items]);
+  
   if (isLoading) return <div>Загрузка...</div>;
   if (error) return <div>Ошибка: {error}</div>;
 
