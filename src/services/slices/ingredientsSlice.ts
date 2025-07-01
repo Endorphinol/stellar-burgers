@@ -36,7 +36,7 @@ const ingredientsSlice = createSlice({
         state.isLoading = false;
         state.items = action.payload;
       })
-      .addCase(fetchIngredients.rejected, (state, action) => {
+      .addCase(fetchIngredients.rejected, (state) => {
         state.isLoading = false;
         state.error = 'Ошибка загрузки ингредиентов';
       });
@@ -48,5 +48,5 @@ export const selectIngredientsError = (state: RootState) =>
   state.ingredients.error;
 export const selectIngredientsLoading = (state: RootState) =>
   state.ingredients.isLoading;
-export const ingredientsReducer = ingredientsSlice.reducer;
-export default ingredientsReducer;
+
+export default ingredientsSlice.reducer;

@@ -46,8 +46,8 @@ export const profileOrdersSlice = createSlice({
     connectionClosed: (state) => {
       state.isConnected = false;
     },
-    getMessage: (state, action: PayloadAction<TOrder[]>) => {
-      state.orders = action.payload;
+    getMessage: (state, action: PayloadAction<{ orders: TOrder[] }>) => {
+      state.orders = action.payload.orders;
     }
   },
   extraReducers: (builder) => {

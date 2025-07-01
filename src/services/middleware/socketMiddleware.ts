@@ -19,6 +19,12 @@ export const socketMiddleware = (): Middleware<{}, RootState> => (store) => {
       socket = new WebSocket(action.payload);
     }
 
+    if (ConnectionClosed.match(action)) {
+      if (socket) {
+        socket.close();
+      }
+    }
+
     if (socket) {
       socket.onopen = () => {
         dispatch(ConnectionSuccess());
