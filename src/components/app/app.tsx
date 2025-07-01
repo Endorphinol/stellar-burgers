@@ -9,7 +9,7 @@ import {
   Profile,
   ProfileOrders,
   Register,
-  ResetPassword,
+  ResetPassword
 } from '@pages';
 import '../../index.css';
 import styles from './app.module.css';
@@ -38,10 +38,10 @@ const App: FC = () => {
     <div className={styles.app}>
       <AppHeader />
       <Routes location={background || location}>
-        <Route path="/" element={<ConstructorPage />} />
-        <Route path="/feed" element={<Feed />} />
+        <Route path='/' element={<ConstructorPage />} />
+        <Route path='/feed' element={<Feed />} />
         <Route
-          path="/login"
+          path='/login'
           element={
             <ProtectedRoute onlyUnAuth>
               <Login />
@@ -49,7 +49,7 @@ const App: FC = () => {
           }
         />
         <Route
-          path="/register"
+          path='/register'
           element={
             <ProtectedRoute onlyUnAuth>
               <Register />
@@ -57,7 +57,7 @@ const App: FC = () => {
           }
         />
         <Route
-          path="/forgot-password"
+          path='/forgot-password'
           element={
             <ProtectedRoute onlyUnAuth>
               <ForgotPassword />
@@ -65,7 +65,7 @@ const App: FC = () => {
           }
         />
         <Route
-          path="/reset-password"
+          path='/reset-password'
           element={
             <ProtectedRoute onlyUnAuth>
               <ResetPassword />
@@ -73,7 +73,7 @@ const App: FC = () => {
           }
         />
         <Route
-          path="/profile"
+          path='/profile'
           element={
             <ProtectedRoute>
               <Profile />
@@ -81,39 +81,39 @@ const App: FC = () => {
           }
         />
         <Route
-          path="/profile/orders"
+          path='/profile/orders'
           element={
             <ProtectedRoute>
               <ProfileOrders />
             </ProtectedRoute>
           }
         />
-        <Route path="/ingredients/:id" element={<IngredientDetails />} />
-        <Route path="*" element={<NotFound404 />} />
+        <Route path='/ingredients/:id' element={<IngredientDetails />} />
+        <Route path='*' element={<NotFound404 />} />
       </Routes>
       {background && (
         <Routes>
           <Route
-            path="/feed/:number"
+            path='/feed/:number'
             element={
-              <Modal title="Детали заказа" onClose={handleModalClose}>
+              <Modal title='Детали заказа' onClose={handleModalClose}>
                 <OrderInfo />
               </Modal>
             }
           />
           <Route
-            path="/ingredients/:id"
+            path='/ingredients/:id'
             element={
-              <Modal title="Детали ингредиента" onClose={handleModalClose}>
+              <Modal title='Детали ингредиента' onClose={handleModalClose}>
                 <IngredientDetails />
               </Modal>
             }
           />
           <Route
-            path="/profile/orders/:number"
+            path='/profile/orders/:number'
             element={
               <ProtectedRoute>
-                <Modal title="Детали заказа" onClose={handleModalClose}>
+                <Modal title='Детали заказа' onClose={handleModalClose}>
                   <OrderInfo />
                 </Modal>
               </ProtectedRoute>

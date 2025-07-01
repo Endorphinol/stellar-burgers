@@ -18,7 +18,7 @@ export const initialState: TProfileOrdersState = {
 };
 
 export const fetchProfileOrders = createAsyncThunk(
-  'profileOrders/fetchAll', 
+  'profileOrders/fetchAll',
   async (_, { rejectWithValue }) => {
     try {
       const response = await getOrdersApi();

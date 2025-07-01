@@ -5,20 +5,23 @@ import { BurgerConstructorUI } from '@ui';
 import { TConstructorIngredient } from '@utils-types';
 import {
   selectConstructorItems,
-  clearConstructor,
+  clearConstructor
 } from '../../services/slices/constructorSlice';
 import { selectUser } from '../../services/slices/authSlice';
 import { createOrder } from '../../services/slices/orderSlice';
 import { RootState } from '../../services/store';
-
 
 export const BurgerConstructor: FC = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const constructorItems = useSelector(selectConstructorItems);
   const user = useSelector(selectUser);
-  const orderRequest = useSelector((state: RootState) => state.order.isOrderLoading);
-  const orderModalData = useSelector((state: RootState) => state.order.orderModalData);
+  const orderRequest = useSelector(
+    (state: RootState) => state.order.isOrderLoading
+  );
+  const orderModalData = useSelector(
+    (state: RootState) => state.order.orderModalData
+  );
 
   const onOrderClick = () => {
     if (!constructorItems.bun || orderRequest) return;
@@ -28,8 +31,10 @@ export const BurgerConstructor: FC = () => {
     }
     const ingredientIds = [
       constructorItems.bun._id,
-      ...constructorItems.ingredients.map((item: TConstructorIngredient) => item._id),
-      constructorItems.bun._id,
+      ...constructorItems.ingredients.map(
+        (item: TConstructorIngredient) => item._id
+      ),
+      constructorItems.bun._id
     ];
     dispatch(createOrder(ingredientIds)).then(() => {
       dispatch(clearConstructor());
