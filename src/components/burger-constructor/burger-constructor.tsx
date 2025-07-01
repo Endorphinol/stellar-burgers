@@ -37,6 +37,8 @@ export const BurgerConstructor: FC = () => {
     [constructorItems]
   );
 
+
+
   return (
     <BurgerConstructorUI
       price={price}
