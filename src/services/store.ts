@@ -9,6 +9,7 @@ import { orderReducer } from './slices/orderSlice';
 import { authReducer } from './slices/authSlice';
 import { feedReducer } from './slices/feedSlice';
 import { profileOrdersSlice } from './slices/profileOrdersSlice';
+import { socketMiddleware } from './middleware/socketMiddleware';
 
 const rootReducer = combineReducers({
   ingredients: ingredientsReducer,
@@ -20,7 +21,9 @@ const rootReducer = combineReducers({
 
 export const store = configureStore({
   reducer: rootReducer,
-  devTools: process.env.NODE_ENV !== 'production'
+  devTools: process.env.NODE_ENV !== 'production',
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware().concat(socketMiddleware),
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

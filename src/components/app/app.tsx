@@ -16,18 +16,21 @@ import { AppHeader, IngredientDetails, Modal, OrderInfo } from '@components';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
 import { checkUserAuth } from 'src/services/slices/authSlice';
+import { ProtectedRoute } from 'src/services/protected-route';
 
 const App = () => {
   const dispatch = useDispatch();
   const location = useLocation();
   const background = location.state?.background;
+
   useEffect(() => {
     dispatch(checkUserAuth());
-  }, [dispatch]);
+  }, [dispatch])
+
   const navigate = useNavigate();
   const handleModalClose = () => {
     navigate(-1);
-  };
+  }
 
   return (
     <div className={styles.app}>
@@ -73,6 +76,6 @@ const App = () => {
       )}
     </div>
   );
-};
+}
 
 export default App;
