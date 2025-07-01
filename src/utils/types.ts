@@ -8,8 +8,9 @@ export type TIngredient = {
   calories: number;
   price: number;
   image: string;
-  image_large: string;
   image_mobile: string;
+  image_large: string;
+  __v: number;
 };
 
 export type TConstructorIngredient = TIngredient & {
@@ -18,14 +19,13 @@ export type TConstructorIngredient = TIngredient & {
 
 export type TOrder = {
   _id: string;
+  ingredients: string[];
   status: string;
   name: string;
   createdAt: string;
   updatedAt: string;
   number: number;
-  ingredients: string[];
 };
-
 export type TOrdersData = {
   orders: TOrder[];
   total: number;
