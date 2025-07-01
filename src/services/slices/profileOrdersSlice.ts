@@ -62,7 +62,7 @@ export const profileOrdersSlice = createSlice({
       })
       .addCase(fetchProfileOrders.rejected, (state, action) => {
         state.isLoading = false;
-        state.error = action.error.message || 'Failed to fetch orders';
+        state.error = action.error.message || 'Ошибка в получений заказа';
       });
   }
 });
@@ -75,7 +75,8 @@ export const {
   getMessage
 } = profileOrdersSlice.actions;
 
-export const selectProfileOrders = (state: RootState) => state.profileOrders.orders;
+export const selectProfileOrders = (state: RootState) =>
+  state.profileOrders.orders;
 export const selectProfileOrdersStatus = (state: RootState) => ({
   isLoading: state.profileOrders.isLoading,
   error: state.profileOrders.error,

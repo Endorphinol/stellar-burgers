@@ -12,7 +12,7 @@ type TOrderState = {
 const initialState: TOrderState = {
   orderRequest: false,
   orderModalData: null,
-  error: null
+  error: null,
 };
 
 export const createOrder = createAsyncThunk(
@@ -47,7 +47,7 @@ export const orderSlice = createSlice({
       })
       .addCase(createOrder.rejected, (state, action) => {
         state.orderRequest = false;
-        state.error = action.error.message || 'Failed to create order';
+        state.error = action.error.message || 'Ошибка при созданий заказа';
       });
   }
 });
