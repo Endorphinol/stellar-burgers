@@ -7,7 +7,7 @@ export const fetchIngredients = createAsyncThunk(
   'ingredients/fetchAll',
   async () => {
     const response = await getIngredientsApi();
-    return response;
+    return response as TIngredient[];
   }
 );
 
@@ -48,4 +48,5 @@ export const selectIngredientsError = (state: RootState) =>
   state.ingredients.error;
 export const selectIngredientsLoading = (state: RootState) =>
   state.ingredients.isLoading;
-export default ingredientsSlice.reducer;
+export const ingredientsReducer = ingredientsSlice.reducer;
+export default ingredientsReducer;
