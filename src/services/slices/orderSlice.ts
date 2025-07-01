@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { orderBurgerApi  } from '../../utils/burger-api';
+import { orderBurgerApi } from '../../utils/burger-api';
 import { TOrder } from '@utils-types';
 import { RootState } from '../store';
 
@@ -12,7 +12,7 @@ type TOrderState = {
 const initialState: TOrderState = {
   orderRequest: false,
   orderModalData: null,
-  error: null,
+  error: null
 };
 
 export const createOrder = createAsyncThunk(

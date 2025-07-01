@@ -1,22 +1,22 @@
 import { FC, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { BurgerConstructorUI } from '@ui';
-import { TConstructorIngredient, TOrder } from '@utils-types';
+import { TConstructorIngredient } from '@utils-types';
 import {
   clearConstructor,
-  selectConstructor
+  selectConstructorBun,
+  selectConstructorIngredients
 } from '../../services/slices/constructorSlice';
 import { selectUser } from '../../services/slices/authSlice';
 import { createOrder } from '../../services/slices/orderSlice';
-import { RootState, useAppDispatch, useAppSelector } from '../../services/store';
+import { useAppDispatch, useAppSelector } from '../../services/store';
 
 export const BurgerConstructor: FC = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  const { bun, ingredients } = useAppSelector(
-    (state: RootState) => state.constructor
-  );
+  const bun = useAppSelector(selectConstructorBun);
+  const ingredients = useAppSelector(selectConstructorIngredients);
   
   const user = useAppSelector(selectUser);
   const { orderRequest, orderModalData } = useAppSelector(
@@ -47,7 +47,10 @@ export const BurgerConstructor: FC = () => {
   const price = useMemo(
     () =>
       (bun ? bun.price * 2 : 0) +
-      ingredients.reduce((sum, item) => sum + item.price, 0),
+      ingredients.reduce(
+        (sum: number, item: TConstructorIngredient) => sum + item.price,
+        0
+      ),
     [bun, ingredients]
   );
 
