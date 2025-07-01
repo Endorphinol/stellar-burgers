@@ -18,7 +18,7 @@ export const initialState: TProfileOrdersState = {
 };
 
 export const fetchProfileOrders = createAsyncThunk(
-  'profileOrders/fetchAll',
+  'profileOrders/fetchAll', 
   async (_, { rejectWithValue }) => {
     try {
       const response = await getOrdersApi();
@@ -33,20 +33,20 @@ export const profileOrdersSlice = createSlice({
   name: 'profileOrders',
   initialState,
   reducers: {
-    wsConnectionStart: (state, action: PayloadAction<string>) => {
+    ConnectionStart: (state, action: PayloadAction<string>) => {
       state.wsConnected = true;
     },
-    wsConnectionSuccess: (state) => {
+    ConnectionSuccess: (state) => {
       state.wsConnected = true;
     },
-    wsConnectionError: (state, action: PayloadAction<string>) => {
+    ConnectionError: (state, action: PayloadAction<string>) => {
       state.wsConnected = false;
       state.error = action.payload;
     },
-    wsConnectionClosed: (state) => {
+    ConnectionClosed: (state) => {
       state.wsConnected = false;
     },
-    wsGetMessage: (state, action: PayloadAction<TOrdersData>) => {
+    GetMessage: (state, action: PayloadAction<TOrdersData>) => {
       state.orders = action.payload.orders;
     }
   },
@@ -68,11 +68,11 @@ export const profileOrdersSlice = createSlice({
 });
 
 export const {
-  wsConnectionStart,
-  wsConnectionSuccess,
-  wsConnectionError,
-  wsConnectionClosed,
-  wsGetMessage
+  ConnectionStart,
+  ConnectionSuccess,
+  ConnectionError,
+  ConnectionClosed,
+  GetMessage
 } = profileOrdersSlice.actions;
 
 export const selectProfileOrders = (state: RootState) =>
