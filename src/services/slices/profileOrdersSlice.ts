@@ -22,7 +22,7 @@ export const fetchProfileOrders = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const response = await getOrdersApi();
-      return response.orders as TOrder[];
+      return response;
     } catch (error) {
       return rejectWithValue(error);
     }
