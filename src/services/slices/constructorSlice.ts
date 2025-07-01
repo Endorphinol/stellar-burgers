@@ -61,7 +61,7 @@ export const {
 
 export const selectConstructor = (state: RootState) => state.constructor;
 export const selectConstructorBun = (state: RootState) => state.constructor.bun;
-export const selectConstructorIngredients = (state: RootState) => 
+export const selectConstructorIngredients = (state: RootState) =>
   state.constructor.ingredients;
 
 export default constructorSlice.reducer;

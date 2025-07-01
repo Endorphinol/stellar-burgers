@@ -1,4 +1,4 @@
-import { TOrder, TOrdersData } from '@utils-types';
+import { TOrder } from '@utils-types';
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import { getOrdersApi } from '../../utils/burger-api';
 import { RootState } from '../store';
@@ -22,7 +22,7 @@ export const fetchProfileOrders = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const response = await getOrdersApi();
-      return response.orders;
+      return response.orders as TOrder[];
     } catch (error) {
       return rejectWithValue(error);
     }

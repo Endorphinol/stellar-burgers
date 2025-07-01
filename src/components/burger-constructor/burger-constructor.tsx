@@ -17,7 +17,7 @@ export const BurgerConstructor: FC = () => {
 
   const bun = useAppSelector(selectConstructorBun);
   const ingredients = useAppSelector(selectConstructorIngredients);
-  
+
   const user = useAppSelector(selectUser);
   const { orderRequest, orderModalData } = useAppSelector(
     (state) => state.order
