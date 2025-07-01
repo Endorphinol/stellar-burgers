@@ -31,6 +31,14 @@ export const registerUser = createAsyncThunk(
   }
 );
 
+export const updateUser = createAsyncThunk(
+  'auth/update',
+  async (data: { name: string; email: string; password?: string }) => {
+    const response = await updateUserApi(data);
+    return response.user;
+  }
+);
+
 export const loginUser = createAsyncThunk(
   'auth/login',
   async (data: { email: string; password: string }) => {
@@ -109,16 +117,17 @@ const authSlice = createSlice({
       })
       .addCase(checkUserAuth.rejected, (state) => {
         state.isAuthChecked = true;
+      })
+      .addCase(updateUser.fulfilled, (state, action) => {
+        state.user = action.payload;
       });
   }
 });
 
 export const { setAuthChecked } = authSlice.actions;
-
 export const selectUser = (state: RootState) => state.auth.user;
 export const selectIsAuthChecked = (state: RootState) =>
   state.auth.isAuthChecked;
 export const selectAuthLoading = (state: RootState) => state.auth.isLoading;
 export const selectAuthError = (state: RootState) => state.auth.error;
-
 export default authSlice.reducer;
