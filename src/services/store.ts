@@ -4,7 +4,7 @@ import { combineSlices } from '@reduxjs/toolkit';
 import { socketMiddleware } from './middleware/socketMiddleware';
 import profileOrdersSlice from './slices/profileOrdersSlice';
 import feedSlice from './slices/feedSlice';
-import constructorSlice from './slices/constructorSlice';
+import constructorSlice from './slices/constructSlice';
 import authSlice from './slices/authSlice';
 import orderSlice from './slices/orderSlice';
 import ingredientsSlice from './slices/ingredientsSlice';

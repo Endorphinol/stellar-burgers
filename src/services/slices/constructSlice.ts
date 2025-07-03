@@ -17,7 +17,7 @@ const initialState: TConstructorState = {
   status: 'idle'
 };
 
-const constructorSlice = createSlice({
+const constructSlice = createSlice({
   name: 'constructor',
   initialState,
   reducers: {
@@ -63,12 +63,12 @@ export const {
   removeIngredient,
   moveIngredient,
   clearConstructor
-} = constructorSlice.actions;
+} = constructSlice.actions;
 
 export const {
   selectConstructor,
   selectConstructorBun,
   selectConstructorIngredients
-} = constructorSlice.selectors;
+} = constructSlice.selectors;
 
-export default constructorSlice;
+export default constructSlice;

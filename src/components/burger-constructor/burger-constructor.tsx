@@ -5,7 +5,7 @@ import {
   clearConstructor,
   selectConstructorBun,
   selectConstructorIngredients
-} from '../../services/slices/constructorSlice';
+} from '../../services/slices/constructSlice';
 import { selectUser } from '../../services/slices/authSlice';
 import { createOrder } from '../../services/slices/orderSlice';
 import { useAppDispatch, useAppSelector } from '../../services/store';
