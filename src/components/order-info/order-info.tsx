@@ -17,24 +17,16 @@ export const OrderInfo: FC = () => {
 
     const date = new Date(orderData.createdAt);
 
-    const ingredientsInfo = orderData.ingredients.reduce(
-      (acc: TIngredientsWithCount, item: string) => {
-        const ingredient = ingredients.find(
-          (ing: TIngredient) => ing._id === item
-        );
-        if (!ingredient) return acc;
+    const ingredientsInfo = orderData.ingredients.reduce((acc, item) => {
+      const ingredient = ingredients.find((ing) => ing._id === item);
+      if (!ingredient) return acc;
 
-        const currentCount = acc[item]?.count || 0;
-        return {
-          ...acc,
-          [item]: {
-            ...ingredient,
-            count: currentCount + 1
-          }
-        };
-      },
-      {} as TIngredientsWithCount
-    );
+      acc[item] = {
+        ...ingredient,
+        count: (acc[item]?.count || 0) + 1
+      };
+      return acc;
+    }, {} as TIngredientsWithCount);
 
     const total = Object.values(ingredientsInfo).reduce(
       (acc, item) => acc + item.price * item.count,
@@ -44,8 +36,11 @@ export const OrderInfo: FC = () => {
     return {
       ...orderData,
       ingredientsInfo,
-      date,
-      total
+      date: new Date(orderData.createdAt),
+      total: Object.values(ingredientsInfo).reduce(
+        (sum, { price, count }) => sum + price * count,
+        0
+      )
     };
   }, [orderData, ingredients]);
 

@@ -29,7 +29,7 @@ export const ProtectedRoute: FC<IProtectedRoute> = ({
   }
 
   if (error && !onlyUnAuth) {
-    return <Navigate to='/error' state={{ from: location }} replace />;
+    return <Navigate to='/error' state={{ from: location, error }} replace />;
   }
 
   if (onlyUnAuth && user) {

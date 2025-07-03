@@ -20,7 +20,7 @@ export const DefaultElement: Story = {
   args: {
     ingredient: {
       _id: '111',
-      id: '222',
+      uuid: '222',
       name: 'Булка',
       type: 'top',
       proteins: 12,
