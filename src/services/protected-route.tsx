@@ -1,7 +1,8 @@
 import { FC } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 import { useAppSelector } from '../services/store';
-import { selectUser } from '../services/slices/authSlice';
+import { selectIsAuthChecked, selectUser } from '../services/slices/authSlice';
+import { Preloader } from '@ui';
 
 interface IProtectedRoute {
   onlyUnAuth?: boolean;
@@ -13,10 +14,16 @@ export const ProtectedRoute: FC<IProtectedRoute> = ({
   children
 }) => {
   const user = useAppSelector(selectUser);
+  const isAuthChecked = useAppSelector(selectIsAuthChecked);
   const location = useLocation();
 
+  if (!isAuthChecked) {
+    return <Preloader />;
+  }
+
   if (onlyUnAuth && user) {
-    return <Navigate to={location.state?.from || '/'} replace />;
+    const from = location.state?.from || '/';
+    return <Navigate to={from} replace />;
   }
 
   if (!onlyUnAuth && !user) {

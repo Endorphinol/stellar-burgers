@@ -8,11 +8,13 @@ export type TConstructorIngredient = TIngredient & {
 type TConstructorState = {
   bun: TIngredient | null;
   ingredients: TConstructorIngredient[];
+  status: 'idle';
 };
 
 const initialState: TConstructorState = {
   bun: null,
-  ingredients: []
+  ingredients: [],
+  status: 'idle'
 };
 
 const constructorSlice = createSlice({
@@ -22,10 +24,15 @@ const constructorSlice = createSlice({
     addIngredient: {
       reducer: (state, action: PayloadAction<TConstructorIngredient>) => {
         if (action.payload.type === 'bun') {
-          state.bun = action.payload;
-        } else {
-          state.ingredients.push(action.payload);
+          return {
+            ...state,
+            bun: { ...action.payload }
+          };
         }
+        return {
+          ...state,
+          ingredients: [...state.ingredients, { ...action.payload }]
+        };
       },
       prepare: (ingredient: TIngredient) => ({
         payload: {

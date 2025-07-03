@@ -56,7 +56,14 @@ export const logoutUser = createAsyncThunk('auth/logout', async () => {
 
 export const checkUserAuth = createAsyncThunk(
   'auth/check',
-  async () => await getUserApi()
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await getUserApi();
+      return { user: response.user };
+    } catch (error) {
+      return rejectWithValue(error);
+    }
+  }
 );
 
 const initialState: TAuthState = {

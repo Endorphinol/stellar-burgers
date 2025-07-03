@@ -48,7 +48,9 @@ export const socketMiddleware = (): Middleware<{}, RootState> => (store) => {
         try {
           const { data } = event;
           const parsedData: TOrdersData = JSON.parse(data);
-          dispatch(getMessage(parsedData));
+          if (parsedData.orders && parsedData.total !== undefined) {
+            dispatch(getMessage(parsedData));
+          }
         } catch (error) {
           console.error('Ошибка парсинга данных:', error);
           dispatch(connectionError('Ошибка формата данных'));

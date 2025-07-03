@@ -21,7 +21,7 @@ export const BurgerConstructor: FC = () => {
     (state) => state.order
   );
 
-  const handleOrderClick = () => {
+  const handleOrderClick = async () => {
     if (!bun || orderRequest) return;
 
     if (!user) {
@@ -29,17 +29,17 @@ export const BurgerConstructor: FC = () => {
       return;
     }
 
-    const ingredientIds = [
-      bun._id,
-      ...ingredients.map((item) => item._id),
-      bun._id
-    ];
-
-    dispatch(createOrder(ingredientIds))
-      .unwrap()
-      .then(() => {
-        dispatch(clearConstructor());
-      });
+    try {
+      const ingredientIds = [
+        bun._id,
+        ...ingredients.map((item) => item._id),
+        bun._id
+      ];
+      await dispatch(createOrder(ingredientIds)).unwrap();
+      dispatch(clearConstructor());
+    } catch (error) {
+      console.error('Ошибка создания заказа:', error);
+    }
   };
 
   const price = useMemo(() => {
