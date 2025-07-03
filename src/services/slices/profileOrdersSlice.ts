@@ -22,7 +22,9 @@ export const fetchProfileOrders = createAsyncThunk(
     try {
       return await getOrdersApi();
     } catch (error) {
-      return rejectWithValue(error);
+      return rejectWithValue(
+        error instanceof Error ? error.message : 'Неизвестная ошибка'
+      );
     }
   }
 );

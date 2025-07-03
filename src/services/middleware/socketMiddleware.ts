@@ -1,5 +1,5 @@
 import { Middleware } from 'redux';
-import { AppDispatch, RootState } from '../store';
+import { RootState } from '../store';
 import {
   connectionStart,
   connectionSuccess,
