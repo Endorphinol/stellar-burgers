@@ -21,7 +21,11 @@ export const createOrder = createAsyncThunk(
       const response = await orderBurgerApi(ingredients);
       return response.order;
     } catch (error) {
-      return rejectWithValue(error);
+      return rejectWithValue({
+        message:
+          error instanceof Error ? error.message : 'Ошибка при создании заказа',
+        status: (error as any).response?.status || 500
+      });
     }
   }
 );
@@ -46,7 +50,7 @@ const orderSlice = createSlice({
       })
       .addCase(createOrder.rejected, (state, action) => {
         state.orderRequest = false;
-        state.error = action.error.message || 'Ошибка при создании заказа';
+        state.error = (action.payload as { message: string }).message;
       });
   },
   selectors: {

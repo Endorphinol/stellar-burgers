@@ -22,9 +22,10 @@ export const fetchProfileOrders = createAsyncThunk(
     try {
       return await getOrdersApi();
     } catch (error) {
-      return rejectWithValue(
-        error instanceof Error ? error.message : 'Неизвестная ошибка'
-      );
+      return rejectWithValue({
+        message: error instanceof Error ? error.message : 'Неизвестная ошибка',
+        status: (error as any).response?.status || 500
+      });
     }
   }
 );
@@ -62,7 +63,7 @@ const profileOrdersSlice = createSlice({
       })
       .addCase(fetchProfileOrders.rejected, (state, action) => {
         state.isLoading = false;
-        state.error = action.error.message || 'Ошибка при получении заказов';
+        state.error = (action.payload as { message: string }).message;
       });
   },
   selectors: {

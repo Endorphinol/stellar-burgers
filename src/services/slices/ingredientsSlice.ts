@@ -18,12 +18,15 @@ export const fetchIngredients = createAsyncThunk(
   'ingredients/fetchAll',
   async (_, { rejectWithValue }) => {
     try {
-      const ingredients = await getIngredientsApi();
-      return ingredients;
+      return await getIngredientsApi();
     } catch (error) {
-      return rejectWithValue(
-        error instanceof Error ? error.message : 'Ошибка загрузки ингредиентов'
-      );
+      return rejectWithValue({
+        message:
+          error instanceof Error
+            ? error.message
+            : 'Ошибка загрузки ингредиентов',
+        status: (error as any).response?.status || 500
+      });
     }
   }
 );
@@ -44,7 +47,7 @@ const ingredientsSlice = createSlice({
       })
       .addCase(fetchIngredients.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.error.message || 'Ошибка загрузки';
+        state.error = (action.payload as { message: string }).message;
       });
   },
   selectors: {

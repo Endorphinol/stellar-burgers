@@ -1,10 +1,24 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import { getFeedsApi } from '../../utils/burger-api';
 import { TOrder } from '../../utils/types';
 
+type ApiError = {
+  message: string;
+  status?: number;
+};
+
 export const fetchFeeds = createAsyncThunk(
   'feed/fetchAll',
-  async () => await getFeedsApi()
+  async (_, { rejectWithValue }) => {
+    try {
+      return await getFeedsApi();
+    } catch (error) {
+      return rejectWithValue({
+        message: error instanceof Error ? error.message : 'Неизвестная ошибка',
+        status: (error as any).response?.status
+      } as ApiError);
+    }
+  }
 );
 
 type TFeedState = {
@@ -31,22 +45,33 @@ const feedSlice = createSlice({
   reducers: {
     connectionStart: (state) => {
       state.wsConnected = true;
+      state.error = null;
     },
     connectionSuccess: (state) => {
       state.wsConnected = true;
+      state.error = null;
     },
-    connectionError: (state, action) => {
+    connectionError: (state, action: PayloadAction<string>) => {
       state.wsConnected = false;
       state.error = action.payload;
     },
     connectionClosed: (state) => {
       state.wsConnected = false;
+      state.error = null;
     },
-    getMessage: (state, action) => {
+    getMessage: (
+      state,
+      action: PayloadAction<{
+        orders: TOrder[];
+        total: number;
+        totalToday: number;
+      }>
+    ) => {
       const { orders, total, totalToday } = action.payload;
       state.orders = orders;
       state.total = total;
       state.totalToday = totalToday;
+      state.error = null;
     }
   },
   extraReducers: (builder) => {
@@ -60,11 +85,13 @@ const feedSlice = createSlice({
         state.orders = action.payload.orders;
         state.total = action.payload.total;
         state.totalToday = action.payload.totalToday;
+        state.error = null;
       })
       .addCase(fetchFeeds.rejected, (state, action) => {
         state.isLoading = false;
         state.error =
-          action.error.message || 'Ошибка при получении ленты заказов';
+          (action.payload as ApiError).message ||
+          'Ошибка при получении ленты заказов';
       });
   }
 });

@@ -60,7 +60,10 @@ export const checkUserAuth = createAsyncThunk(
     try {
       return await getUserApi();
     } catch (error) {
-      return rejectWithValue(error);
+      return rejectWithValue({
+        message: error instanceof Error ? error.message : 'Неизвестная ошибка',
+        code: (error as any).code || null
+      });
     }
   }
 );
@@ -116,7 +119,7 @@ const authSlice = createSlice({
       })
       .addCase(checkUserAuth.rejected, (state, action) => {
         state.isLoading = false;
-        state.error = action.payload as string;
+        state.error = (action.payload as { message: string }).message;
         state.isAuthChecked = true;
       })
       .addCase(updateUser.fulfilled, (state, action) => {
