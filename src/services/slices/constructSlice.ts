@@ -18,7 +18,7 @@ const initialState: TConstructorState = {
 };
 
 const constructSlice = createSlice({
-  name: 'constructor',
+  name: 'construct',
   initialState,
   reducers: {
     addIngredient: {

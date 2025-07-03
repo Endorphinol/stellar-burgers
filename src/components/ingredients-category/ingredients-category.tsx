@@ -9,7 +9,7 @@ export const IngredientsCategory = forwardRef<
   TIngredientsCategoryProps
 >(({ title, titleRef, ingredients }, ref) => {
   const { bun, ingredients: constructorIngredients = [] } = useAppSelector(
-    (state) => state.constructor
+    (state) => state.construct
   );
 
   const ingredientsCounters = useMemo(() => {
