@@ -58,8 +58,7 @@ export const checkUserAuth = createAsyncThunk(
   'auth/check',
   async (_, { rejectWithValue }) => {
     try {
-      const response = await getUserApi();
-      return { user: response.user };
+      return await getUserApi();
     } catch (error) {
       return rejectWithValue(error);
     }
@@ -114,7 +113,9 @@ const authSlice = createSlice({
         state.user = action.payload.user;
         state.isAuthChecked = true;
       })
-      .addCase(checkUserAuth.rejected, (state) => {
+      .addCase(checkUserAuth.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload as string;
         state.isAuthChecked = true;
       })
       .addCase(updateUser.fulfilled, (state, action) => {
