@@ -10,12 +10,14 @@ import {
   ProfileOrders,
   Register,
   ResetPassword
-} from '@pages';
-import '../../index.css';
+} from '../../pages';
 import styles from './app.module.css';
-import { AppHeader, IngredientDetails, Modal, OrderInfo } from '@components';
 import { useEffect } from 'react';
 import { checkUserAuth } from '../../services/slices/authSlice';
+import { AppHeader } from '../app-header';
+import { OrderInfo } from '../order-info';
+import { Modal } from '../modal';
+import { IngredientDetails } from '../ingredient-details';
 import { ProtectedRoute } from '../../services/protected-route';
 import { useAppDispatch } from '../../services/store';
 
@@ -90,6 +92,7 @@ const App: FC = () => {
         <Route path='/ingredients/:id' element={<IngredientDetails />} />
         <Route path='*' element={<NotFound404 />} />
       </Routes>
+
       {background && (
         <Routes>
           <Route
