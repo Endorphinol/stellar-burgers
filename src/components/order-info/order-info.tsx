@@ -1,19 +1,16 @@
 import { FC, useMemo } from 'react';
-import { useSelector } from 'react-redux';
 import { Preloader } from '../ui/preloader';
 import { OrderInfoUI } from '../ui/order-info';
 import { TIngredient } from '@utils-types';
-import { RootState } from '../../services/store';
+import { selectIngredients } from '../../services/slices/ingredientsSlice';
+import { selectOrder } from '../../services/slices/orderSlice';
+import { useAppSelector } from '../../services/store';
 
 type TIngredientsWithCount = Record<string, TIngredient & { count: number }>;
 
 export const OrderInfo: FC = () => {
-  const orderData = useSelector(
-    (state: RootState) => state.order.orderModalData
-  );
-  const ingredients = useSelector(
-    (state: RootState) => state.ingredients.items
-  );
+  const orderData = useAppSelector(selectOrder).orderModalData;
+  const ingredients = useAppSelector(selectIngredients);
 
   const orderInfo = useMemo(() => {
     if (!orderData || !ingredients.length) return null;
@@ -22,7 +19,9 @@ export const OrderInfo: FC = () => {
 
     const ingredientsInfo = orderData.ingredients.reduce(
       (acc: TIngredientsWithCount, item: string) => {
-        const ingredient = ingredients.find((ing) => ing._id === item);
+        const ingredient = ingredients.find(
+          (ing: TIngredient) => ing._id === item
+        );
         if (!ingredient) return acc;
 
         const currentCount = acc[item]?.count || 0;
@@ -38,8 +37,7 @@ export const OrderInfo: FC = () => {
     );
 
     const total = Object.values(ingredientsInfo).reduce(
-      (acc: number, item: TIngredient & { count: number }) =>
-        acc + item.price * item.count,
+      (acc, item) => acc + item.price * item.count,
       0
     );
 

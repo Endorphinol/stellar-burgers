@@ -5,18 +5,23 @@ import { BurgerConstructor } from '../../components';
 import { Preloader } from '../../components/ui';
 import { FC, useEffect } from 'react';
 import { fetchIngredients } from '../../services/slices/ingredientsSlice';
+import {
+  selectIngredients,
+  selectIngredientsLoading,
+  selectIngredientsError
+} from '../../services/slices/ingredientsSlice';
 
 export const ConstructorPage: FC = () => {
   const dispatch = useAppDispatch();
-  const { items, loading, error } = useAppSelector(
-    (state) => state.ingredients
-  );
+  const ingredients = useAppSelector(selectIngredients);
+  const loading = useAppSelector(selectIngredientsLoading);
+  const error = useAppSelector(selectIngredientsError);
 
   useEffect(() => {
-    if (!items.length) {
+    if (!ingredients.length) {
       dispatch(fetchIngredients());
     }
-  }, [dispatch, items]);
+  }, [dispatch, ingredients]);
 
   if (loading) return <Preloader />;
   if (error) return <div>Ошибка: {error}</div>;

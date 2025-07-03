@@ -1,11 +1,11 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { getFeedsApi } from '../../utils/burger-api';
 import { TOrder } from '../../utils/types';
 
-export const fetchFeeds = createAsyncThunk('feed/fetchAll', async () => {
-  const response = await getFeedsApi();
-  return response;
-});
+export const fetchFeeds = createAsyncThunk(
+  'feed/fetchAll',
+  async () => await getFeedsApi()
+);
 
 type TFeedState = {
   orders: TOrder[];
@@ -25,24 +25,24 @@ const initialState: TFeedState = {
   wsConnected: false
 };
 
-export const feedSlice = createSlice({
+const feedSlice = createSlice({
   name: 'feed',
   initialState,
   reducers: {
-    ConnectionStart: (state, action) => {
+    connectionStart: (state) => {
       state.wsConnected = true;
     },
-    ConnectionSuccess: (state) => {
+    connectionSuccess: (state) => {
       state.wsConnected = true;
     },
-    ConnectionError: (state, action) => {
+    connectionError: (state, action) => {
       state.wsConnected = false;
       state.error = action.payload;
     },
-    ConnectionClosed: (state) => {
+    connectionClosed: (state) => {
       state.wsConnected = false;
     },
-    GetMessage: (state, action) => {
+    getMessage: (state, action) => {
       const { orders, total, totalToday } = action.payload;
       state.orders = orders;
       state.total = total;
@@ -63,16 +63,18 @@ export const feedSlice = createSlice({
       })
       .addCase(fetchFeeds.rejected, (state, action) => {
         state.isLoading = false;
-        state.error = action.error.message || 'Ошибка';
+        state.error =
+          action.error.message || 'Ошибка при получении ленты заказов';
       });
   }
 });
 
 export const {
-  ConnectionStart,
-  ConnectionSuccess,
-  ConnectionError,
-  ConnectionClosed,
-  GetMessage
+  connectionStart,
+  connectionSuccess,
+  connectionError,
+  connectionClosed,
+  getMessage
 } = feedSlice.actions;
-export default feedSlice.reducer;
+
+export default feedSlice;

@@ -1,11 +1,11 @@
 import { Middleware } from 'redux';
 import { AppDispatch, RootState } from '../store';
 import {
-  ConnectionStart,
-  ConnectionSuccess,
-  ConnectionError,
-  ConnectionClosed,
-  GetMessage
+  connectionStart,
+  connectionSuccess,
+  connectionError,
+  connectionClosed,
+  getMessage
 } from '../slices/feedSlice';
 import { TOrdersData } from '@utils-types';
 
@@ -15,33 +15,44 @@ export const socketMiddleware = (): Middleware<{}, RootState> => (store) => {
   return (next) => (action) => {
     const { dispatch } = store;
 
-    if (ConnectionStart.match(action)) {
-      socket = new WebSocket(action.payload);
+    if (connectionStart.match(action)) {
+      if (typeof action.payload === 'string') {
+        socket = new WebSocket(action.payload);
+      } else {
+        console.error('Ошибка');
+        return;
+      }
     }
 
-    if (ConnectionClosed.match(action)) {
+    if (connectionClosed.match(action)) {
       if (socket) {
         socket.close();
+        socket = null;
       }
     }
 
     if (socket) {
       socket.onopen = () => {
-        dispatch(ConnectionSuccess());
+        dispatch(connectionSuccess());
       };
 
       socket.onerror = (event) => {
-        dispatch(ConnectionError('WebSocket error'));
+        dispatch(connectionError('Ошибка соединения'));
       };
 
       socket.onclose = () => {
-        dispatch(ConnectionClosed());
+        dispatch(connectionClosed());
       };
 
       socket.onmessage = (event) => {
-        const { data } = event;
-        const parsedData = JSON.parse(data) as TOrdersData;
-        dispatch(GetMessage(parsedData));
+        try {
+          const { data } = event;
+          const parsedData: TOrdersData = JSON.parse(data);
+          dispatch(getMessage(parsedData));
+        } catch (error) {
+          console.error('Ошибка парсинга данных:', error);
+          dispatch(connectionError('Ошибка формата данных'));
+        }
       };
     }
 

@@ -1,42 +1,28 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { getIngredientsApi } from '../../utils/burger-api';
-import { TIngredient } from '../../utils/types';
-import { RootState } from '../store';
+import { TIngredient } from '@utils-types';
 
-export const fetchIngredients = createAsyncThunk(
-  'ingredients/fetchAll',
-  async (_, { rejectWithValue }) => {
-    try {
-      return await getIngredientsApi();
-    } catch (error) {
-      if (error instanceof Error) {
-        return rejectWithValue(error.message);
-      }
-      return rejectWithValue('Ошибка');
-    }
-  }
-);
 type TIngredientsState = {
-  items: TIngredient[];
+  ingredients: TIngredient[];
   loading: boolean;
   error: string | null;
 };
 
 const initialState: TIngredientsState = {
-  items: [],
+  ingredients: [],
   loading: false,
   error: null
 };
 
-export const ingredientsSlice = createSlice({
+export const fetchIngredients = createAsyncThunk(
+  'ingredients/fetchAll',
+  async () => await getIngredientsApi()
+);
+
+const ingredientsSlice = createSlice({
   name: 'ingredients',
   initialState,
   reducers: {},
-  selectors: {
-    selectIngredients: (state) => state.items,
-    selectIngredientsLoading: (state) => state.loading,
-    selectIngredientsError: (state) => state.error
-  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchIngredients.pending, (state) => {
@@ -44,13 +30,18 @@ export const ingredientsSlice = createSlice({
         state.error = null;
       })
       .addCase(fetchIngredients.fulfilled, (state, action) => {
-        state.items = action.payload;
         state.loading = false;
+        state.ingredients = action.payload;
       })
       .addCase(fetchIngredients.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.error.message || 'Ошибка в загрузке ингредиентов';
+        state.error = action.error.message || 'Ошибка в получений ингредиентов';
       });
+  },
+  selectors: {
+    selectIngredients: (state) => state.ingredients,
+    selectIngredientsLoading: (state) => state.loading,
+    selectIngredientsError: (state) => state.error
   }
 });
 
@@ -60,4 +51,4 @@ export const {
   selectIngredientsError
 } = ingredientsSlice.selectors;
 
-export default ingredientsSlice.reducer;
+export default ingredientsSlice;

@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import {
   loginUserApi,
   registerUserApi,
@@ -7,7 +7,6 @@ import {
   updateUserApi
 } from '../../utils/burger-api';
 import { setCookie, deleteCookie } from '../../utils/cookie';
-import { RootState } from '../store';
 
 type TUser = {
   name: string;
@@ -57,14 +56,7 @@ export const logoutUser = createAsyncThunk('auth/logout', async () => {
 
 export const checkUserAuth = createAsyncThunk(
   'auth/check',
-  async (_, { dispatch }) => {
-    try {
-      const response = await getUserApi();
-      return response.user;
-    } catch (error) {
-      return Promise.reject(error);
-    }
-  }
+  async () => await getUserApi()
 );
 
 const initialState: TAuthState = {
@@ -78,7 +70,7 @@ const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    setAuthChecked: (state, action: PayloadAction<boolean>) => {
+    setAuthChecked: (state, action) => {
       state.isAuthChecked = action.payload;
     }
   },
@@ -112,7 +104,7 @@ const authSlice = createSlice({
         state.user = null;
       })
       .addCase(checkUserAuth.fulfilled, (state, action) => {
-        state.user = action.payload;
+        state.user = action.payload.user;
         state.isAuthChecked = true;
       })
       .addCase(checkUserAuth.rejected, (state) => {
@@ -121,13 +113,21 @@ const authSlice = createSlice({
       .addCase(updateUser.fulfilled, (state, action) => {
         state.user = action.payload;
       });
+  },
+  selectors: {
+    selectUser: (state) => state.user,
+    selectIsAuthChecked: (state) => state.isAuthChecked,
+    selectAuthLoading: (state) => state.isLoading,
+    selectAuthError: (state) => state.error
   }
 });
 
 export const { setAuthChecked } = authSlice.actions;
-export const selectUser = (state: RootState) => state.auth.user;
-export const selectIsAuthChecked = (state: RootState) =>
-  state.auth.isAuthChecked;
-export const selectAuthLoading = (state: RootState) => state.auth.isLoading;
-export const selectAuthError = (state: RootState) => state.auth.error;
-export default authSlice.reducer;
+export const {
+  selectUser,
+  selectIsAuthChecked,
+  selectAuthLoading,
+  selectAuthError
+} = authSlice.selectors;
+
+export default authSlice;

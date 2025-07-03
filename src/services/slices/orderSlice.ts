@@ -1,7 +1,6 @@
-import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { orderBurgerApi } from '../../utils/burger-api';
 import { TOrder } from '@utils-types';
-import { RootState } from '../store';
 
 type TOrderState = {
   orderRequest: boolean;
@@ -27,7 +26,7 @@ export const createOrder = createAsyncThunk(
   }
 );
 
-export const orderSlice = createSlice({
+const orderSlice = createSlice({
   name: 'order',
   initialState,
   reducers: {
@@ -41,21 +40,21 @@ export const orderSlice = createSlice({
         state.orderRequest = true;
         state.error = null;
       })
-      .addCase(
-        createOrder.fulfilled,
-        (state, action: PayloadAction<TOrder>) => {
-          state.orderRequest = false;
-          state.orderModalData = action.payload;
-        }
-      )
+      .addCase(createOrder.fulfilled, (state, action) => {
+        state.orderRequest = false;
+        state.orderModalData = action.payload;
+      })
       .addCase(createOrder.rejected, (state, action) => {
         state.orderRequest = false;
-        state.error = action.error.message || 'Ошибка при созданий заказа';
+        state.error = action.error.message || 'Ошибка при создании заказа';
       });
+  },
+  selectors: {
+    selectOrder: (state) => state
   }
 });
 
 export const { clearOrder } = orderSlice.actions;
-export const selectOrder = (state: RootState) => state.order;
+export const { selectOrder } = orderSlice.selectors;
 
-export default orderSlice.reducer;
+export default orderSlice;
