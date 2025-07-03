@@ -44,7 +44,7 @@ const ingredientsSlice = createSlice({
       })
       .addCase(fetchIngredients.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.error.message || 'Ошибка в получений ингредиентов';
+        state.error = action.error.message || 'Ошибка загрузки';
       });
   },
   selectors: {
