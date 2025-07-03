@@ -5,12 +5,17 @@ import { RootState } from '../store';
 
 export const fetchIngredients = createAsyncThunk(
   'ingredients/fetchAll',
-  async () => {
-    const response = await getIngredientsApi();
-    return response as TIngredient[];
+  async (_, { rejectWithValue }) => {
+    try {
+      return await getIngredientsApi();
+    } catch (error) {
+      if (error instanceof Error) {
+        return rejectWithValue(error.message);
+      }
+      return rejectWithValue('Ошибка');
+    }
   }
 );
-
 type TIngredientsState = {
   items: TIngredient[];
   loading: boolean;
@@ -23,10 +28,15 @@ const initialState: TIngredientsState = {
   error: null
 };
 
-const ingredientsSlice = createSlice({
+export const ingredientsSlice = createSlice({
   name: 'ingredients',
   initialState,
   reducers: {},
+  selectors: {
+    selectIngredients: (state) => state.items,
+    selectIngredientsLoading: (state) => state.loading,
+    selectIngredientsError: (state) => state.error
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchIngredients.pending, (state) => {
@@ -39,16 +49,15 @@ const ingredientsSlice = createSlice({
       })
       .addCase(fetchIngredients.rejected, (state, action) => {
         state.loading = false;
-        state.error =
-          action.error.message || 'Ошибка при загрузке ингридиентов';
+        state.error = action.error.message || 'Ошибка в загрузке ингредиентов';
       });
   }
 });
 
-export const selectIngredients = (state: RootState) => state.ingredients.items;
-export const selectIngredientsError = (state: RootState) =>
-  state.ingredients.error;
-export const selectIngredientsLoading = (state: RootState) =>
-  state.ingredients.loading;
+export const {
+  selectIngredients,
+  selectIngredientsLoading,
+  selectIngredientsError
+} = ingredientsSlice.selectors;
 
 export default ingredientsSlice.reducer;
