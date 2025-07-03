@@ -22,7 +22,7 @@ export const BurgerConstructor: FC = () => {
   );
 
   const handleOrderClick = async () => {
-    if (!bun || orderRequest) return;
+    if (!bun || ingredients.length === 0 || orderRequest) return;
 
     if (!user) {
       navigate('/login', { state: { from: '/' } });
@@ -35,8 +35,10 @@ export const BurgerConstructor: FC = () => {
         ...ingredients.map((item) => item._id),
         bun._id
       ];
-      await dispatch(createOrder(ingredientIds)).unwrap();
-      dispatch(clearConstructor());
+      const result = await dispatch(createOrder(ingredientIds)).unwrap();
+      if (result) {
+        dispatch(clearConstructor());
+      }
     } catch (error) {
       console.error('Ошибка создания заказа:', error);
     }
