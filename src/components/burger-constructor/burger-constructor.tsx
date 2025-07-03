@@ -15,8 +15,7 @@ export const BurgerConstructor: FC = () => {
   const navigate = useNavigate();
 
   const bun = useAppSelector(selectConstructorBun);
-  const ingredients = useAppSelector(selectConstructorIngredients);
-
+  const ingredients = useAppSelector(selectConstructorIngredients) || [];
   const user = useAppSelector(selectUser);
   const { orderRequest, orderModalData } = useAppSelector(
     (state) => state.order
@@ -43,12 +42,15 @@ export const BurgerConstructor: FC = () => {
       });
   };
 
-  const price = useMemo(
-    () =>
-      (bun ? bun.price * 2 : 0) +
-      ingredients.reduce<number>((sum, item) => sum + item.price, 0),
-    [bun, ingredients]
-  );
+  const price = useMemo(() => {
+    const bunPrice = bun ? bun.price * 2 : 0;
+    const ingredientsPrice = ingredients.reduce(
+      (sum, item) => sum + item.price,
+      0
+    );
+    return bunPrice + ingredientsPrice;
+  }, [bun, ingredients]);
+
   return (
     <BurgerConstructorUI
       price={price}
