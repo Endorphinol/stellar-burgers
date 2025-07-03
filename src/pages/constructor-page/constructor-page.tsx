@@ -8,7 +8,7 @@ import { fetchIngredients } from '../../services/slices/ingredientsSlice';
 
 export const ConstructorPage: FC = () => {
   const dispatch = useAppDispatch();
-  const { items, isLoading, error } = useAppSelector(
+  const { items, loading, error } = useAppSelector(
     (state) => state.ingredients
   );
 
@@ -18,7 +18,7 @@ export const ConstructorPage: FC = () => {
     }
   }, [dispatch, items]);
 
-  if (isLoading) return <Preloader />;
+  if (loading) return <Preloader />;
   if (error) return <div>Ошибка: {error}</div>;
 
   return (

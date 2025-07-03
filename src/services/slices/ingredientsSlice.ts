@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { getIngredientsApi } from '../../utils/burger-api';
 import { TIngredient } from '../../utils/types';
@@ -14,13 +13,13 @@ export const fetchIngredients = createAsyncThunk(
 
 type TIngredientsState = {
   items: TIngredient[];
-  isLoading: boolean;
+  loading: boolean;
   error: string | null;
 };
 
 const initialState: TIngredientsState = {
   items: [],
-  isLoading: false,
+  loading: false,
   error: null
 };
 
@@ -31,15 +30,17 @@ const ingredientsSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(fetchIngredients.pending, (state) => {
-        state.isLoading = true;
+        state.loading = true;
+        state.error = null;
       })
       .addCase(fetchIngredients.fulfilled, (state, action) => {
-        state.isLoading = false;
         state.items = action.payload;
+        state.loading = false;
       })
-      .addCase(fetchIngredients.rejected, (state) => {
-        state.isLoading = false;
-        state.error = 'Ошибка загрузки ингредиентов';
+      .addCase(fetchIngredients.rejected, (state, action) => {
+        state.loading = false;
+        state.error =
+          action.error.message || 'Ошибка при загрузке ингридиентов';
       });
   }
 });
@@ -48,6 +49,6 @@ export const selectIngredients = (state: RootState) => state.ingredients.items;
 export const selectIngredientsError = (state: RootState) =>
   state.ingredients.error;
 export const selectIngredientsLoading = (state: RootState) =>
-  state.ingredients.isLoading;
+  state.ingredients.loading;
 
 export default ingredientsSlice.reducer;
