@@ -18,31 +18,39 @@ export const socketMiddleware =
       const { dispatch } = store;
 
       if (connectionStart.match(action)) {
+        if (socket) {
+          socket.close();
+        }
+
         socket = new WebSocket(wsUrl);
-      }
 
-      if (connectionClosed.match(action)) {
-        socket?.close();
-        socket = null;
-      }
+        socket.onopen = null;
+        socket.onerror = null;
+        socket.onclose = null;
+        socket.onmessage = null;
 
-      if (socket) {
         socket.onopen = () => {
           dispatch(connectionSuccess());
         };
 
         socket.onerror = (event) => {
-          dispatch(connectionError('Ошибка соединения'));
+          if (socket) {
+            dispatch(connectionError('Ошибка соединения'));
+            socket.close();
+          }
         };
 
-        socket.onclose = () => {
-          dispatch(connectionClosed());
+        socket.onclose = (event) => {
+          if (socket) {
+            dispatch(connectionClosed());
+            socket = null;
+          }
         };
 
         socket.onmessage = (event) => {
           try {
             const data = JSON.parse(event.data) as TOrdersData;
-            if (data.orders && data.total !== undefined) {
+            if (data?.orders && data.total !== undefined) {
               dispatch(getMessage(data));
             }
           } catch (error) {
@@ -52,6 +60,16 @@ export const socketMiddleware =
         };
       }
 
-      next(action);
+      if (connectionClosed.match(action) && socket) {
+        socket.onopen = null;
+        socket.onerror = null;
+        socket.onclose = null;
+        socket.onmessage = null;
+
+        socket.close();
+        socket = null;
+      }
+
+      return next(action);
     };
   };
