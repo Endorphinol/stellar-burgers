@@ -1,11 +1,9 @@
 import { FC } from 'react';
-import { Link } from 'react-router-dom';
+import { AppHeaderUI } from '@ui';
+import { useAppSelector } from '../../services/store';
+import { selectUser } from '../../services/slices/authSlice';
 
-export const AppHeader: FC = () => (
-  <header>
-    <nav>
-      <Link to='/'>Конструктор</Link>
-      <Link to='/feed'>Лента заказов</Link>
-    </nav>
-  </header>
-);
+export const AppHeader: FC = () => {
+  const userName = useAppSelector(selectUser)?.name || '';
+  return <AppHeaderUI userName={userName} />;
+};
