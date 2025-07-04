@@ -90,6 +90,7 @@ const App: FC = () => {
           }
         />
         <Route path='/ingredients/:id' element={<IngredientDetails />} />
+        <Route path='/feed/:id' element={<OrderInfo />} />
         <Route path='*' element={<NotFound404 />} />
       </Routes>
 

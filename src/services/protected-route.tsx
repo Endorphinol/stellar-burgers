@@ -2,7 +2,6 @@ import { FC } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 import { useAppSelector } from '../services/store';
 import {
-  selectAuthError,
   selectAuthLoading,
   selectIsAuthChecked,
   selectUser

@@ -7,12 +7,12 @@ import { selectIngredients } from '../../services/slices/ingredientsSlice';
 
 export const IngredientDetails: FC = () => {
   const { id } = useParams();
-  const ingredients = useAppSelector(selectIngredients);
+  const { ingredients, loading } = useAppSelector((state) => state.ingredients);
   const ingredientData = ingredients.find((item) => item._id === id);
 
   if (!ingredientData) {
     return <Preloader />;
   }
-
+  if (loading) return <Preloader />;
   return <IngredientDetailsUI ingredientData={ingredientData} />;
 };

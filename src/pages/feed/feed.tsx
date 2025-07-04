@@ -5,8 +5,7 @@ import { fetchFeeds } from '../../services/slices/feedSlice';
 
 export const Feed: FC = () => {
   const dispatch = useAppDispatch();
-  const orders = useAppSelector((state) => state.feed.orders);
-
+  const { orders, isLoading, error } = useAppSelector((state) => state.feed);
   useEffect(() => {
     dispatch(fetchFeeds());
   }, [dispatch]);
@@ -14,6 +13,8 @@ export const Feed: FC = () => {
   const handleGetFeeds = () => {
     dispatch(fetchFeeds());
   };
+
+  if (error) return <div>Ошибка: {error}</div>;
 
   return <FeedUI orders={orders} handleGetFeeds={handleGetFeeds} />;
 };
