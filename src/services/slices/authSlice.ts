@@ -20,6 +20,11 @@ type TAuthState = {
   error: string | null;
 };
 
+type ApiError = {
+  message: string;
+  code?: number | null;
+};
+
 export const registerUser = createAsyncThunk(
   'auth/register',
   async (data: { email: string; password: string; name: string }) => {
@@ -62,8 +67,8 @@ export const checkUserAuth = createAsyncThunk(
     } catch (error) {
       return rejectWithValue({
         message: error instanceof Error ? error.message : 'Неизвестная ошибка',
-        code: (error as any).code || null
-      });
+        code: (error as { code?: number })?.code || null
+      } as ApiError);
     }
   }
 );
@@ -95,7 +100,8 @@ const authSlice = createSlice({
       })
       .addCase(registerUser.rejected, (state, action) => {
         state.isLoading = false;
-        state.error = action.error.message || 'Ошибка регистрации';
+        state.error =
+          (action.payload as ApiError)?.message || 'Ошибка регистрации';
       })
       .addCase(loginUser.pending, (state) => {
         state.isLoading = true;

@@ -6,14 +6,12 @@ type TProfileOrdersState = {
   orders: TOrder[];
   isLoading: boolean;
   error: string | null;
-  isConnected: boolean;
 };
 
 const initialState: TProfileOrdersState = {
   orders: [],
   isLoading: false,
-  error: null,
-  isConnected: false
+  error: null
 };
 
 export const fetchProfileOrders = createAsyncThunk(
@@ -33,24 +31,7 @@ export const fetchProfileOrders = createAsyncThunk(
 const profileOrdersSlice = createSlice({
   name: 'profileOrders',
   initialState,
-  reducers: {
-    connectionStart: (state) => {
-      state.isConnected = true;
-    },
-    connectionSuccess: (state) => {
-      state.isConnected = true;
-    },
-    connectionError: (state, action) => {
-      state.isConnected = false;
-      state.error = action.payload;
-    },
-    connectionClosed: (state) => {
-      state.isConnected = false;
-    },
-    getMessage: (state, action) => {
-      state.orders = action.payload.orders;
-    }
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(fetchProfileOrders.pending, (state) => {
@@ -70,19 +51,10 @@ const profileOrdersSlice = createSlice({
     selectProfileOrders: (state) => state.orders,
     selectProfileOrdersStatus: (state) => ({
       isLoading: state.isLoading,
-      error: state.error,
-      isConnected: state.isConnected
+      error: state.error
     })
   }
 });
-
-export const {
-  connectionStart,
-  connectionSuccess,
-  connectionError,
-  connectionClosed,
-  getMessage
-} = profileOrdersSlice.actions;
 
 export const { selectProfileOrders, selectProfileOrdersStatus } =
   profileOrdersSlice.selectors;

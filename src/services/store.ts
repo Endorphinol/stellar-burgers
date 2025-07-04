@@ -1,7 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 import { combineSlices } from '@reduxjs/toolkit';
-import { socketMiddleware } from './middleware/socketMiddleware';
 import profileOrdersSlice from './slices/profileOrdersSlice';
 import feedSlice from './slices/feedSlice';
 import constructorSlice from './slices/constructSlice';
