@@ -7,13 +7,15 @@ import {
   selectConstructorIngredients
 } from '../../services/slices/constructSlice';
 import { selectUser } from '../../services/slices/authSlice';
-import { createOrder } from '../../services/slices/orderSlice';
+import { clearOrder, createOrder } from '../../services/slices/orderSlice';
 import { useAppDispatch, useAppSelector } from '../../services/store';
 
 export const BurgerConstructor: FC = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-
+  const handleCloseOrderModal = () => {
+    dispatch(clearOrder());
+  };
   const bun = useAppSelector(selectConstructorBun);
   const ingredients = useAppSelector(selectConstructorIngredients) || [];
   const user = useAppSelector(selectUser);
@@ -59,6 +61,7 @@ export const BurgerConstructor: FC = () => {
       orderRequest={orderRequest}
       constructorItems={{ bun, ingredients }}
       orderModalData={orderModalData}
+      onClose={handleCloseOrderModal}
       onOrderClick={handleOrderClick}
       closeOrderModal={() => dispatch(clearConstructor())}
     />
