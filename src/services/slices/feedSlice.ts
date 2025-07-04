@@ -13,10 +13,7 @@ export const fetchFeeds = createAsyncThunk(
     try {
       return await getFeedsApi();
     } catch (error) {
-      return rejectWithValue({
-        message: error instanceof Error ? error.message : 'Неизвестная ошибка',
-        status: (error as any).response?.status
-      } as ApiError);
+      return rejectWithValue(error instanceof Error ? error.message : 'Ошибка');
     }
   }
 );
