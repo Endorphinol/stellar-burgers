@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import { orderBurgerApi } from '../../utils/burger-api';
 import { TOrder } from '@utils-types';
 
@@ -34,6 +34,10 @@ const orderSlice = createSlice({
   name: 'order',
   initialState,
   reducers: {
+    setOrderModalData: (state, action: PayloadAction<TOrder | null>) => {
+      state.orderModalData = action.payload;
+      state.error = null;
+    },
     clearOrder: (state) => {
       state.orderModalData = null;
       state.orderRequest = false;
@@ -61,7 +65,8 @@ const orderSlice = createSlice({
   }
 });
 
-export const { clearOrder } = orderSlice.actions;
+export const { clearOrder, setOrderModalData } = orderSlice.actions;
+
 export const { selectOrder } = orderSlice.selectors;
 
 export default orderSlice;

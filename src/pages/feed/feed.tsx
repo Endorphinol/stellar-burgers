@@ -15,9 +15,9 @@ export const Feed: FC = () => {
     dispatch(fetchFeeds());
   };
 
-  if (isLoading) return <Preloader />;
-
+  if (isLoading && !orders.length) return <Preloader />;
   if (error) return <div>Ошибка: {error}</div>;
+  if (!orders.length) return <div>Нет доступных заказов</div>;
 
   return <FeedUI orders={orders} handleGetFeeds={handleGetFeeds} />;
 };
