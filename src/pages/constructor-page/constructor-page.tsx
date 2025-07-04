@@ -18,10 +18,10 @@ export const ConstructorPage: FC = () => {
   const error = useAppSelector(selectIngredientsError);
 
   useEffect(() => {
-    if (!ingredients.length) {
+    if (!ingredients.length && !loading) {
       dispatch(fetchIngredients());
     }
-  }, [dispatch, ingredients]);
+  }, [dispatch, ingredients.length, loading]);
 
   if (loading) return <Preloader />;
   if (error) return <div>Ошибка: {error}</div>;

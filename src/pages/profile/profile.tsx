@@ -1,11 +1,18 @@
 import { ProfileUI } from '@ui-pages';
 import { FC, SyntheticEvent, useEffect, useState } from 'react';
 import { useAppSelector, useAppDispatch } from '../../services/store';
-import { selectUser, updateUser } from '../../services/slices/authSlice';
+import {
+  selectAuthError,
+  selectAuthLoading,
+  selectUser,
+  updateUser
+} from '../../services/slices/authSlice';
 
 export const Profile: FC = () => {
   const dispatch = useAppDispatch();
   const user = useAppSelector(selectUser);
+  const isLoading = useAppSelector(selectAuthLoading);
+  const error = useAppSelector(selectAuthError);
   const [formValue, setFormValue] = useState({
     name: user?.name || '',
     email: user?.email || '',

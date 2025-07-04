@@ -21,15 +21,10 @@ export const ProtectedRoute: FC<IProtectedRoute> = ({
   const user = useAppSelector(selectUser);
   const isAuthChecked = useAppSelector(selectIsAuthChecked);
   const isLoading = useAppSelector(selectAuthLoading);
-  const error = useAppSelector(selectAuthError);
   const location = useLocation();
 
   if (isLoading || !isAuthChecked) {
     return <Preloader />;
-  }
-
-  if (error && !onlyUnAuth) {
-    return <Navigate to='/error' state={{ from: location, error }} replace />;
   }
 
   if (onlyUnAuth && user) {
