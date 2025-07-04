@@ -25,7 +25,7 @@ export const BurgerConstructor: FC = () => {
 
   const handleOrderClick = async () => {
     if (!bun || ingredients.length === 0 || orderRequest) return;
-
+    if (orderRequest) return;
     if (!user) {
       navigate('/login', { state: { from: '/' } });
       return;
@@ -46,14 +46,12 @@ export const BurgerConstructor: FC = () => {
     }
   };
 
-  const price = useMemo(() => {
-    const bunPrice = bun ? bun.price * 2 : 0;
-    const ingredientsPrice = ingredients.reduce(
-      (sum, item) => sum + item.price,
-      0
-    );
-    return bunPrice + ingredientsPrice;
-  }, [bun, ingredients]);
+  const price = useMemo(
+    () =>
+      (bun?.price || 0) * 2 +
+      ingredients.reduce((sum, item) => sum + item.price, 0),
+    [bun, ingredients]
+  );
 
   return (
     <BurgerConstructorUI
@@ -63,7 +61,6 @@ export const BurgerConstructor: FC = () => {
       orderModalData={orderModalData}
       onClose={handleCloseOrderModal}
       onOrderClick={handleOrderClick}
-      closeOrderModal={() => dispatch(clearConstructor())}
     />
   );
 };
