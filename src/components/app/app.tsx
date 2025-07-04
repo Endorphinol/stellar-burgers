@@ -13,7 +13,10 @@ import {
 } from '../../pages';
 import styles from './app.module.css';
 import { useEffect } from 'react';
-import { checkUserAuth } from '../../services/slices/authSlice';
+import {
+  checkUserAuth,
+  selectAuthLoading
+} from '../../services/slices/authSlice';
 import { AppHeader } from '../app-header';
 import { OrderInfo } from '../order-info';
 import { Modal } from '../modal';
