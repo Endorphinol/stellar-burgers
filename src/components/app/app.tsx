@@ -20,6 +20,9 @@ import { Modal } from '../modal';
 import { IngredientDetails } from '../ingredient-details';
 import { ProtectedRoute } from '../../services/protected-route';
 import { useAppDispatch } from '../../services/store';
+import { fetchIngredients } from '../../services/slices/ingredientsSlice';
+import { fetchFeeds } from '../../services/slices/feedSlice';
+import { fetchProfileOrders } from '../../services/slices/profileOrdersSlice';
 
 const App: FC = () => {
   const dispatch = useAppDispatch();
@@ -29,6 +32,16 @@ const App: FC = () => {
 
   useEffect(() => {
     dispatch(checkUserAuth());
+    dispatch(fetchIngredients());
+    dispatch(fetchFeeds());
+  }, [dispatch]);
+
+  useEffect(() => {
+    dispatch(checkUserAuth()).then((action) => {
+      if (action.payload) {
+        dispatch(fetchProfileOrders());
+      }
+    });
   }, [dispatch]);
 
   const handleModalClose = () => {
