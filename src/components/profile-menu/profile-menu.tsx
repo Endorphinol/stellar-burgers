@@ -9,10 +9,13 @@ export const ProfileMenu: FC = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
-  const handleLogout = () => {
-    dispatch(logoutUser());
-    navigate('/login');
+  const handleLogout = async () => {
+    try {
+      await dispatch(logoutUser());
+      navigate('/login');
+    } catch (error) {
+      console.error('Ошибка при выходе:', error);
+    }
   };
-
   return <ProfileMenuUI handleLogout={handleLogout} pathname={pathname} />;
 };

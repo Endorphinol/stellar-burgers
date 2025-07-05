@@ -1,4 +1,4 @@
-import { FC, useMemo } from 'react';
+import { FC, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { BurgerConstructorUI } from '@ui';
 import {
@@ -45,6 +45,13 @@ export const BurgerConstructor: FC = () => {
       console.error('Ошибка создания заказа:', error);
     }
   };
+
+  useEffect(
+    () => () => {
+      dispatch(clearOrder());
+    },
+    [dispatch]
+  );
 
   const price = useMemo(
     () =>
