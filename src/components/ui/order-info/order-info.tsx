@@ -5,17 +5,19 @@ import {
 } from '@zlden/react-developer-burger-ui-components';
 
 import styles from './order-info.module.css';
-
 import { OrderInfoUIProps } from './type';
 import { OrderStatus } from '@components';
 
 export const OrderInfoUI: FC<OrderInfoUIProps> = memo(({ orderInfo }) => (
   <div className={styles.wrap}>
-    <h3 className={`text text_type_main-medium  pb-3 pt-10 ${styles.header}`}>
-      {orderInfo.name}
+    <h3 className={`text text_type_digits-default  ${styles.number}`}>
+      #{orderInfo.number.toString().padStart(6, '0')}
     </h3>
+    <h4 className={`text text_type_main-medium mt-10 mb-3 ${styles.name}`}>
+      {orderInfo.name}
+    </h4>
     <OrderStatus status={orderInfo.status} />
-    <p className={`text text_type_main-medium pt-15 pb=6`}>Состав:</p>
+    <p className={`text text_type_main-medium mt-15 mb-6`}>Состав:</p>
     <ul className={`${styles.list} mb-8`}>
       {Object.values(orderInfo.ingredientsInfo).map((item, index) => (
         <li className={`pb-4 pr-6 ${styles.item}`} key={index}>

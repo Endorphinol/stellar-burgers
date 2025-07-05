@@ -8,22 +8,23 @@ export type TIngredient = {
   calories: number;
   price: number;
   image: string;
-  image_large: string;
   image_mobile: string;
+  image_large: string;
+  __v?: number;
 };
 
 export type TConstructorIngredient = TIngredient & {
-  id: string;
+  uuid: string;
 };
 
 export type TOrder = {
   _id: string;
+  ingredients: string[];
   status: string;
   name: string;
   createdAt: string;
   updatedAt: string;
   number: number;
-  ingredients: string[];
 };
 
 export type TOrdersData = {
@@ -38,3 +39,10 @@ export type TUser = {
 };
 
 export type TTabMode = 'bun' | 'sauce' | 'main';
+
+export type TOrdersResponse = {
+  success: boolean;
+  orders: TOrder[];
+  total: number;
+  totalToday: number;
+};
