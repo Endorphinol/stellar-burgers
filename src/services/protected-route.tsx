@@ -26,13 +26,13 @@ export const ProtectedRoute: FC<IProtectedRoute> = ({
     return <Preloader />;
   }
 
-  if (onlyUnAuth && user) {
-    const from = location.state?.from || '/';
-    return <Navigate to={from} replace />;
-  }
-
   if (!onlyUnAuth && !user) {
     return <Navigate to='/login' state={{ from: location }} replace />;
+  }
+
+  if (onlyUnAuth && user) {
+    const from = location.state?.from || '/profile';
+    return <Navigate to={from} replace />;
   }
 
   return children;
