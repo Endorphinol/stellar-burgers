@@ -17,5 +17,6 @@ export const ProfileMenu: FC = () => {
       console.error('Ошибка при выходе:', error);
     }
   };
+
   return <ProfileMenuUI handleLogout={handleLogout} pathname={pathname} />;
 };

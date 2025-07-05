@@ -1,7 +1,7 @@
 import { FC, SyntheticEvent, useState } from 'react';
 import { LoginUI } from '@ui-pages';
-import { useAppDispatch } from '../../services/store';
-import { useNavigate } from 'react-router-dom';
+import { useAppDispatch, useAppSelector } from '../../services/store';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { loginUser } from '../../services/slices/authSlice';
 
 export const Login: FC = () => {
@@ -10,13 +10,27 @@ export const Login: FC = () => {
   const [error, setError] = useState('');
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const user = useAppSelector((state) => state.auth.user);
 
   const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
+
+    if (user) {
+      navigate('/');
+      return;
+    }
+
     dispatch(loginUser({ email, password }))
       .unwrap()
-      .then(() => navigate('/'))
-      .catch((err) => setError(err.message));
+      .then(() => {
+        const from = location.state?.from?.pathname || '/profile';
+        navigate(from, { replace: true });
+      })
+      .catch((err) => {
+        setError(err.message || 'Ошибка при входе');
+      });
   };
 
   return (

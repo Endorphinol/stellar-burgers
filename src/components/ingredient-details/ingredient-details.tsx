@@ -3,16 +3,20 @@ import { useParams } from 'react-router-dom';
 import { useAppSelector } from '../../services/store';
 import { Preloader } from '../ui/preloader';
 import { IngredientDetailsUI } from '../ui/ingredient-details';
-import { selectIngredients } from '../../services/slices/ingredientsSlice';
 
 export const IngredientDetails: FC = () => {
   const { id } = useParams();
   const { ingredients, loading } = useAppSelector((state) => state.ingredients);
+
+  if (loading) return <Preloader />;
+
   const ingredientData = ingredients.find((item) => item._id === id);
 
   if (!ingredientData) {
-    return <Preloader />;
+    return (
+      <p className='text text_type_main-default mt-20'>Ингредиент не найден</p>
+    );
   }
-  if (loading) return <Preloader />;
+
   return <IngredientDetailsUI ingredientData={ingredientData} />;
 };
