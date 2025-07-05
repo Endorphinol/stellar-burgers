@@ -11,13 +11,14 @@ export const Login: FC = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const location = useLocation();
-
-  const user = useAppSelector((state) => state.auth.user);
+  const isAuth = useAppSelector(
+    (state) => state.auth.isAuthChecked && state.auth.user
+  );
 
   const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
 
-    if (user) {
+    if (isAuth) {
       navigate('/');
       return;
     }
@@ -25,7 +26,7 @@ export const Login: FC = () => {
     dispatch(loginUser({ email, password }))
       .unwrap()
       .then(() => {
-        const from = location.state?.from?.pathname || '/profile';
+        const from = location.state?.from || '/';
         navigate(from, { replace: true });
       })
       .catch((err) => {
