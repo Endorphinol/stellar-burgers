@@ -17,9 +17,8 @@ export const ProtectedRoute: FC<IProtectedRoute> = ({
   onlyUnAuth = false,
   children
 }) => {
-  const isAuth = useAppSelector(
-    (state) => state.auth.isAuthChecked && state.auth.user
-  );
+  const isAuth =
+    useAppSelector(selectIsAuthChecked) && useAppSelector(selectUser);
   const isLoading = useAppSelector(selectAuthLoading);
   const location = useLocation();
 
@@ -28,11 +27,17 @@ export const ProtectedRoute: FC<IProtectedRoute> = ({
   }
 
   if (!onlyUnAuth && !isAuth) {
-    return <Navigate to='/login' state={{ from: location }} replace />;
+    return (
+      <Navigate
+        to='/login'
+        state={{ from: location.pathname || '/profile' }}
+        replace
+      />
+    );
   }
 
   if (onlyUnAuth && isAuth) {
-    const from = location.state?.from?.pathname || '/';
+    const from = location.state?.from?.pathname || '/profile';
     return <Navigate to={from} replace />;
   }
 
