@@ -27,13 +27,7 @@ export const ProtectedRoute: FC<IProtectedRoute> = ({
   }
 
   if (!onlyUnAuth && !isAuth) {
-    return (
-      <Navigate
-        to='/login'
-        state={{ from: location.pathname || '/profile' }}
-        replace
-      />
-    );
+    return <Navigate to='/login' state={{ from: location.pathname }} replace />;
   }
 
   if (onlyUnAuth && isAuth) {

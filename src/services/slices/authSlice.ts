@@ -45,11 +45,17 @@ export const updateUser = createAsyncThunk(
 
 export const loginUser = createAsyncThunk(
   'auth/login',
-  async (data: { email: string; password: string }) => {
-    const response = await loginUserApi(data);
+  async (data: { email: string; password: string; from?: string }) => {
+    const response = await loginUserApi({
+      email: data.email,
+      password: data.password
+    });
     setCookie('accessToken', response.accessToken);
     localStorage.setItem('refreshToken', response.refreshToken);
-    return response.user;
+    return {
+      user: response.user,
+      from: data.from || '/profile'
+    };
   }
 );
 
@@ -109,7 +115,7 @@ const authSlice = createSlice({
       })
       .addCase(loginUser.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.user = action.payload;
+        state.user = action.payload.user;
         state.error = null;
       })
       .addCase(loginUser.rejected, (state, action) => {

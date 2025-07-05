@@ -8,7 +8,7 @@ export type TConstructorIngredient = TIngredient & {
 type TConstructorState = {
   bun: TIngredient | null;
   ingredients: TConstructorIngredient[];
-  status: 'idle';
+  status: 'idle' | 'loading' | 'failed';
 };
 
 const initialState: TConstructorState = {
