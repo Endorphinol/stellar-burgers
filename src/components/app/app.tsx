@@ -33,7 +33,6 @@ const App: FC = () => {
   useEffect(() => {
     dispatch(checkUserAuth());
     dispatch(fetchIngredients());
-    dispatch(fetchFeeds());
   }, [dispatch]);
 
   useEffect(() => {
