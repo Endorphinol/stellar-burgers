@@ -119,7 +119,7 @@ const App: FC = () => {
           <Route
             path='/feed/:number'
             element={
-              <Modal title='Детали заказа' onClose={handleModalClose}>
+              <Modal onClose={handleModalClose}>
                 <OrderInfo />
               </Modal>
             }
