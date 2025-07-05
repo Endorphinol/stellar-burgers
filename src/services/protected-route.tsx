@@ -17,21 +17,22 @@ export const ProtectedRoute: FC<IProtectedRoute> = ({
   onlyUnAuth = false,
   children
 }) => {
-  const isAuth =
-    useAppSelector(selectIsAuthChecked) && useAppSelector(selectUser);
-  const isLoading = useAppSelector(selectAuthLoading);
   const location = useLocation();
+  const { isLoading, isAuth } = useAppSelector((state) => ({
+    isLoading: selectAuthLoading(state),
+    isAuth: selectIsAuthChecked(state) && selectUser(state)
+  }));
 
   if (isLoading) {
     return <Preloader />;
   }
 
   if (!onlyUnAuth && !isAuth) {
-    return <Navigate to='/login' state={{ from: location.pathname }} replace />;
+    return <Navigate to='/login' state={{ from: location }} replace />;
   }
 
   if (onlyUnAuth && isAuth) {
-    const from = location.state?.from?.pathname || '/profile';
+    const from = location.state?.from?.pathname || '/';
     return <Navigate to={from} replace />;
   }
 
