@@ -33,6 +33,10 @@ const initialState = {
   status: 'idle' as const
 };
 
+jest.mock('uuid', () => ({
+  v4: () => '123'
+}));
+
 describe('Тестирование ConstructSlice', () => {
   test('Должен обрабатываться moveIngredient', () => {
     const initialState = {
@@ -47,16 +51,26 @@ describe('Тестирование ConstructSlice', () => {
   });
 
   test('Должен обрабатываться addIngredient для булки', () => {
-    const bun = { ...mockIngredient, type: 'bun' };
+    const bun = { ...mockIngredient, type: 'bun', uuid: '123' };
     const state = constructSlice.reducer(initialState, addIngredient(bun));
-    expect(state.bun).toEqual(bun);
+    expect(state.bun).toEqual(
+      expect.objectContaining({
+        ...bun,
+        uuid: '123'
+      })
+    );
   });
 
-  test('Должен обрабатываться addIngredient для булки', () => {
+  test('Должен обрабатываться addIngredient для замены булки', () => {
     const stateWithBun = { ...initialState, bun: mockBun };
-    const newBun = { ...mockBun, _id: 'new-bun' };
+    const newBun = { ...mockBun, _id: 'new-bun', uuid: '123' };
     const state = constructSlice.reducer(stateWithBun, addIngredient(newBun));
-    expect(state.bun).toEqual(newBun);
+    expect(state.bun).toEqual(
+      expect.objectContaining({
+        ...newBun,
+        uuid: '123'
+      })
+    );
   });
 
   test('Должен обрабатываться removeIngredient', () => {
