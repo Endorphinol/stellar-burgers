@@ -8,7 +8,7 @@ const initialState = {
 };
 
 describe('authSlice', () => {
-  it('Должен обрабатываться loginUser.pending', () => {
+  test('Должен обрабатываться loginUser.pending', () => {
     const action = { type: 'auth/login/pending' };
     const state = authSlice.reducer(initialState, action);
     expect(state.isLoading).toBe(true);
