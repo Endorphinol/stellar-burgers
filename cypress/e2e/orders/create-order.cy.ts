@@ -4,9 +4,9 @@ describe('Создание заказа', () => {
       'getIngredients'
     );
 
-    cy.intercept('POST', 'api/orders', {
-      statusCode: 500,
-      body: { message: 'Server error' }
+    cy.intercept('POST', 'https://norma.nomoreparties.space/api/orders', {
+      statusCode: 200,
+      body: { order: { number: 12345 } }
     }).as('createOrder');
 
     cy.intercept('GET', 'api/auth/user', { fixture: 'user.json' }).as(

@@ -1,10 +1,21 @@
 describe('Тестирование модального окна ингредиента', () => {
   beforeEach(() => {
-    cy.intercept('GET', 'api/ingredients', { fixture: 'ingredients.json' }).as(
-      'getIngredients'
-    );
+    cy.intercept('GET', 'https://norma.nomoreparties.space/api/ingredients', {
+      fixture: 'ingredients.json'
+    }).as('getIngredients');
+
+    cy.intercept('POST', 'https://norma.nomoreparties.space/api/orders', {
+      statusCode: 200,
+      body: { order: { number: 12345 } }
+    }).as('createOrder');
+
+    cy.intercept('GET', 'https://norma.nomoreparties.space/api/auth/user', {
+      fixture: 'user.json'
+    }).as('getUser');
+
+    window.localStorage.setItem('refreshToken', 'fake-refresh-token');
+    cy.setCookie('accessToken', 'fake-access-token');
     cy.visit('/');
-    cy.wait('@getIngredients');
   });
 
   afterEach(() => {
