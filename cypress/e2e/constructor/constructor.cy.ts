@@ -1,6 +1,6 @@
 describe('Конструктор бургера', () => {
   beforeEach(() => {
-    cy.intercept('GET', 'https://norma.nomoreparties.space/api/ingredients', {
+    cy.intercept('GET', '/api/ingredients', {
       fixture: 'ingredients.json'
     }).as('getIngredients');
     cy.visit('/');
