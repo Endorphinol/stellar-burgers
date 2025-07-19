@@ -2,7 +2,7 @@ import ingredientsSlice, { fetchIngredients } from './ingredientsSlice';
 
 describe('Тестирование ingredientsSlice', () => {
   test('Должен обрабатываться fetchIngredients.rejected', () => {
-    const error = { message: 'Error' };
+    const error = { message: 'Ошибка' };
     const state = ingredientsSlice.reducer(
       undefined,
       fetchIngredients.rejected(new Error('Ошибка'), '', undefined)

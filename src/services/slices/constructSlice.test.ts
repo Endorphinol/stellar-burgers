@@ -47,9 +47,9 @@ describe('Тестирование ConstructSlice', () => {
   });
 
   test('Должен обрабатываться addIngredient для булки', () => {
-    const action = addIngredient(mockBun);
-    const state = constructSlice.reducer(initialState, action);
-    expect(state.bun).toEqual(mockBun);
+    const bun = { ...mockIngredient, type: 'bun' };
+    const state = constructSlice.reducer(initialState, addIngredient(bun));
+    expect(state.bun).toEqual(bun);
   });
 
   test('Должен обрабатываться addIngredient для начинки', () => {
