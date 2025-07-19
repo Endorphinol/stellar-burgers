@@ -1,5 +1,5 @@
 // store.test.ts
-import rootReducer from './store';
+import { rootReducer } from './store';
 import { UnknownAction } from 'redux';
 
 describe('rootReducer', () => {

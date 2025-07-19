@@ -1,7 +1,29 @@
 import constructSlice, {
   addIngredient,
-  moveIngredient
+  moveIngredient,
+  TConstructorIngredient
 } from './constructSlice';
+
+const mockIngredient: TConstructorIngredient = {
+  _id: '1',
+  name: 'Ingredient',
+  type: 'main',
+  price: 100,
+  image: '',
+  image_mobile: '',
+  image_large: '',
+  calories: 0,
+  proteins: 0,
+  fat: 0,
+  carbohydrates: 0,
+  uuid: '123'
+};
+
+const initialState = {
+  bun: null,
+  ingredients: [mockIngredient],
+  status: 'idle'
+};
 
 describe('Тестирование ConstructSlice', () => {
   test('should handle moveIngredient', () => {
