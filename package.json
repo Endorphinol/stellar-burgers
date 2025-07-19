@@ -95,7 +95,8 @@
     "cy:run": "cypress run",
     "cy:run-constructor": "cypress run --spec 'cypress/e2e/constructor/*.cy.ts'",
     "cy:run-modals": "cypress run --spec 'cypress/e2e/modals/*.cy.ts'",
-    "test": "jest"
+    "test": "jest",
+    "test:coverage": "jest --coverage"
   },
   "eslintConfig": {
     "extends": [

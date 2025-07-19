@@ -26,7 +26,7 @@ const initialState = {
 };
 
 describe('Тестирование ConstructSlice', () => {
-  test('should handle moveIngredient', () => {
+  test('Должен обрабатываться moveIngredient', () => {
     const initialState = {
       bun: null,
       ingredients: [{ uuid: '1' }, { uuid: '2' }],

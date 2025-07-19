@@ -2,8 +2,8 @@
 import { rootReducer } from './store';
 import { UnknownAction } from 'redux';
 
-describe('rootReducer', () => {
-  it('should return initial state', () => {
+describe('Тестирование rootReducer', () => {
+  it('Должно обрабатываться начальное состояние', () => {
     const state = rootReducer(undefined, {} as UnknownAction);
     expect(state).toEqual({
       auth: {
