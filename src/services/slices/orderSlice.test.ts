@@ -11,7 +11,7 @@ describe('orderSlice', () => {
     const mockOrder = { number: 1234 };
     const action = {
       type: createOrder.fulfilled.type,
-      payload: { order: mockOrder }
+      payload: mockOrder
     };
     const state = orderSlice.reducer(initialState, action);
     expect(state.orderModalData).toEqual(mockOrder);
@@ -19,13 +19,13 @@ describe('orderSlice', () => {
   });
 
   test('Должен обрабатываться createOrder.rejected', () => {
-    const error = 'Error message';
+    const error = { message: 'Error message' };
     const action = {
       type: createOrder.rejected.type,
-      error: { message: error }
+      payload: error
     };
     const state = orderSlice.reducer(initialState, action);
-    expect(state.error).toBe(error);
+    expect(state.error).toBe(error.message);
     expect(state.orderRequest).toBe(false);
   });
 });

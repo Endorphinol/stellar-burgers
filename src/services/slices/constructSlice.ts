@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { TIngredient } from '@utils-types';
+import { v4 as uuidv4 } from 'uuid';
 
 export type TConstructorIngredient = TIngredient & {
   uuid: string;
@@ -32,7 +33,7 @@ const constructSlice = createSlice({
       prepare: (ingredient: TIngredient) => ({
         payload: {
           ...ingredient,
-          uuid: crypto.randomUUID()
+          uuid: uuidv4()
         }
       })
     },

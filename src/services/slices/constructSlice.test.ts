@@ -20,12 +20,6 @@ const mockIngredient: TConstructorIngredient = {
   uuid: '123'
 };
 
-beforeAll(() => {
-  global.crypto = {
-    randomUUID: () => 'mocked-uuid'
-  } as any;
-});
-
 const mockBun: TConstructorIngredient = {
   ...mockIngredient,
   _id: '2',
