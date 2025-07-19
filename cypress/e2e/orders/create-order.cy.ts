@@ -4,9 +4,11 @@ describe('Создание заказа', () => {
       'getIngredients'
     );
 
-    cy.intercept('POST', 'api/orders', { fixture: 'order.json' }).as(
-      'createOrder'
-    );
+    cy.intercept('POST', 'api/orders', {
+      statusCode: 500,
+      body: { message: 'Server error' }
+    }).as('createOrderError');
+
     cy.intercept('GET', 'api/auth/user', { fixture: 'user.json' }).as(
       'getUser'
     );
