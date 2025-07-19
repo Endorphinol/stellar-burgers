@@ -1,4 +1,8 @@
 describe('Модальное окно ингридента', () => {
+  afterEach(() => {
+    window.localStorage.removeItem('refreshToken');
+    cy.clearCookies();
+  });
   beforeEach(() => {
     cy.intercept('GET', 'api/ingredients', { fixture: 'ingredients.json' });
     cy.visit('/');

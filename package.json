@@ -91,12 +91,10 @@
     "lint": "eslint --ext .js,.jsx,.ts,.tsx ./src",
     "lint:fix": "npm run lint -- --fix",
     "format": "prettier ./src --write",
-    "cy:open": "cypress open",
-    "cy:run": "cypress run",
-    "cy:run-constructor": "cypress run --spec 'cypress/e2e/constructor/*.cy.ts'",
-    "cy:run-modals": "cypress run --spec 'cypress/e2e/modals/*.cy.ts'",
     "test": "jest",
-    "test:coverage": "jest --coverage"
+    "test:coverage": "jest --coverage",
+    "cypress:open": "cypress open",
+    "cypress:run": "cypress run"
   },
   "eslintConfig": {
     "extends": [

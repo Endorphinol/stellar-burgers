@@ -1,6 +1,7 @@
 import constructSlice, {
   addIngredient,
   moveIngredient,
+  removeIngredient,
   TConstructorIngredient
 } from './constructSlice';
 
@@ -35,5 +36,17 @@ describe('Тестирование ConstructSlice', () => {
     const action = moveIngredient({ fromIndex: 0, toIndex: 1 });
     const state = constructSlice.reducer(initialState, action);
     expect(state.ingredients).toEqual([{ uuid: '2' }, { uuid: '1' }]);
+  });
+  test('Должен обрабатываться addIngredient для булки', () => {
+    const bun = { ...mockIngredient, type: 'bun' };
+    const state = constructSlice.reducer(initialState, addIngredient(bun));
+    expect(state.bun).toEqual(bun);
+  });
+  test('Должен обрабатываться removeIngredient', () => {
+    const state = constructSlice.reducer(
+      initialState,
+      removeIngredient(mockIngredient.uuid)
+    );
+    expect(state.ingredients).toEqual([]);
   });
 });

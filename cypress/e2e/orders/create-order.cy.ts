@@ -9,7 +9,10 @@ describe('Создание заказа', () => {
     cy.setCookie('accessToken', 'fake-access-token');
     cy.visit('/');
   });
-
+  afterEach(() => {
+    window.localStorage.removeItem('refreshToken');
+    cy.clearCookies();
+  });
   test('Должен произойти создание заказа и сброс конструктора', () => {
     cy.get('[data-testid="ingredient-bun"]')
       .first()
