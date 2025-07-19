@@ -34,7 +34,7 @@ describe('Создание заказа', () => {
       }
     ).as('getUser');
 
-    cy.intercept('POST', '/api/auth/token', {
+    cy.intercept('POST', 'https://norma.nomoreparties.space/api/auth/token', {
       statusCode: 200,
       body: {
         success: true,

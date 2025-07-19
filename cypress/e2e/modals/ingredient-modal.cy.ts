@@ -4,17 +4,6 @@ describe('Тестирование модального окна ингреди�
       fixture: 'ingredients.json'
     }).as('getIngredients');
 
-    cy.intercept('GET', 'https://norma.nomoreparties.space/api/auth/user', {
-      statusCode: 200,
-      body: {
-        success: true,
-        user: {
-          email: 'test@test.com',
-          name: 'Test User'
-        }
-      }
-    }).as('getUser');
-
     cy.intercept(
       'GET',
       'https://norma.nomoreparties.space/api/auth/user',
@@ -45,6 +34,13 @@ describe('Тестирование модального окна ингреди�
         refreshToken: 'new-fake-refresh-token'
       }
     }).as('refreshToken');
+
+    window.localStorage.setItem('refreshToken', 'fake-refresh-token');
+    cy.setCookie('accessToken', 'fake-access-token');
+
+    cy.visit('/');
+    cy.wait(['@getIngredients', '@getUser']);
+    cy.get('[data-testid="ingredient-list"]').should('be.visible');
   });
 
   afterEach(() => {
@@ -52,18 +48,11 @@ describe('Тестирование модального окна ингреди�
     cy.clearCookies();
   });
 
-  window.localStorage.setItem('refreshToken', 'fake-refresh-token');
-  cy.setCookie('accessToken', 'fake-access-token');
-
-  cy.visit('/');
-  cy.wait(['@getIngredients', '@getUser']);
-  cy.get('[data-testid="ingredient-list"]').should('be.visible');
-});
-
-it('Должно открываться и закрываться по клику на крестик', () => {
-  cy.get('[data-testid="ingredient-item"]').first().click();
-  cy.get('[data-testid="modal"]').should('be.visible');
-  cy.get('[data-testid="ingredient-details-name"]').should('exist');
-  cy.get('[data-testid="modal-close"]').click();
-  cy.get('[data-testid="modal"]').should('not.exist');
+  it('Должно открываться и закрываться по клику на крестик', () => {
+    cy.get('[data-testid="ingredient-item"]').first().click();
+    cy.get('[data-testid="modal"]').should('be.visible');
+    cy.get('[data-testid="ingredient-details-name"]').should('exist');
+    cy.get('[data-testid="modal-close"]').click();
+    cy.get('[data-testid="modal"]').should('not.exist');
+  });
 });
