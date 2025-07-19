@@ -34,25 +34,14 @@ describe('Создание заказа', () => {
       }
     ).as('getUser');
 
-    cy.intercept(
-      'POST',
-      'https://norma.nomoreparties.space/api/auth/token',
-      (req) => {
-        const { token } = req.body;
-        if (token === 'fake-refresh-token') {
-          req.reply({
-            statusCode: 200,
-            body: {
-              success: true,
-              accessToken: 'new-fake-access-token',
-              refreshToken: 'new-fake-refresh-token'
-            }
-          });
-        } else {
-          req.reply({ statusCode: 401 });
-        }
+    cy.intercept('POST', '/api/auth/token', {
+      statusCode: 200,
+      body: {
+        success: true,
+        accessToken: 'new-token',
+        refreshToken: 'new-refresh-token'
       }
-    ).as('refreshToken');
+    }).as('refreshToken');
 
     window.localStorage.setItem('refreshToken', 'fake-refresh-token');
     cy.setCookie('accessToken', 'fake-access-token');
