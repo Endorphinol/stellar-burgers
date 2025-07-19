@@ -1,19 +1,30 @@
 describe('Конструктор бургера', () => {
+  beforeEach(() => {
+    cy.intercept('GET', 'api/ingredients', { fixture: 'ingredients.json' }).as(
+      'getIngredients'
+    );
+    cy.visit('/');
+    cy.wait('@getIngredients');
+  });
+
   afterEach(() => {
     window.localStorage.removeItem('refreshToken');
     cy.clearCookies();
   });
-  beforeEach(() => {
-    cy.intercept('GET', 'api/ingredients', { fixture: 'ingredients.json' });
-    cy.visit('/');
-  });
-  test('should add bun and filling to constructor', () => {
+
+  it('Должен добавлять булку и начинку в конструктор', () => {
     cy.get('[data-testid="ingredient-bun"]')
       .first()
-      .drag('[data-testid="constructor-dropzone"]');
+      .trigger('dragstart')
+      .get('[data-testid="constructor-dropzone"]')
+      .trigger('drop')
+      .trigger('dragend');
     cy.get('[data-testid="ingredient-main"]')
       .first()
-      .drag('[data-testid="constructor-dropzone"]');
+      .trigger('dragstart')
+      .get('[data-testid="constructor-dropzone"]')
+      .trigger('drop')
+      .trigger('dragend');
     cy.get('[data-testid="constructor-bun"]').should('exist');
     cy.get('[data-testid="constructor-filling"]').should('exist');
   });
