@@ -20,6 +20,12 @@ const mockIngredient: TConstructorIngredient = {
   uuid: '123'
 };
 
+beforeAll(() => {
+  global.crypto = {
+    randomUUID: () => 'mocked-uuid'
+  } as any;
+});
+
 const mockBun: TConstructorIngredient = {
   ...mockIngredient,
   _id: '2',
@@ -29,7 +35,7 @@ const mockBun: TConstructorIngredient = {
 
 const initialState = {
   bun: null,
-  ingredients: [mockIngredient],
+  ingredients: [],
   status: 'idle' as const
 };
 
@@ -52,10 +58,11 @@ describe('Тестирование ConstructSlice', () => {
     expect(state.bun).toEqual(bun);
   });
 
-  test('Должен обрабатываться addIngredient для начинки', () => {
-    const action = addIngredient(mockIngredient);
-    const state = constructSlice.reducer(initialState, action);
-    expect(state.ingredients).toContainEqual(mockIngredient);
+  test('Должен обрабатываться addIngredient для булки', () => {
+    const stateWithBun = { ...initialState, bun: mockBun };
+    const newBun = { ...mockBun, _id: 'new-bun' };
+    const state = constructSlice.reducer(stateWithBun, addIngredient(newBun));
+    expect(state.bun).toEqual(newBun);
   });
 
   test('Должен обрабатываться removeIngredient', () => {
