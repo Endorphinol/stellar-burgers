@@ -1,86 +1,53 @@
 describe('Создание заказа', () => {
   beforeEach(() => {
-    cy.intercept('GET', 'https://norma.nomoreparties.space/api/ingredients', {
+    // Мокаем все необходимые запросы
+    cy.intercept('GET', '**/api/ingredients', {
       fixture: 'ingredients.json'
     }).as('getIngredients');
 
-    cy.intercept('POST', 'https://norma.nomoreparties.space/api/orders', {
-      statusCode: 200,
-      body: {
-        success: true,
-        order: { number: 12345 }
-      }
+    cy.intercept('POST', '**/api/orders', {
+      fixture: 'order.json'
     }).as('createOrder');
 
-    cy.intercept(
-      'GET',
-      'https://norma.nomoreparties.space/api/auth/user',
-      (req) => {
-        const token = req.headers['authorization'];
-        if (token && token.includes('fake-access-token')) {
-          req.reply({
-            statusCode: 200,
-            body: {
-              success: true,
-              user: {
-                email: 'test@test.com',
-                name: 'Test User'
-              }
-            }
-          });
-        } else {
-          req.reply({ statusCode: 403 });
-        }
-      }
-    ).as('getUser');
+    cy.intercept('GET', '**/api/auth/user', {
+      fixture: 'user.json'
+    }).as('getUser');
 
-    cy.intercept('POST', 'https://norma.nomoreparties.space/api/auth/token', {
-      statusCode: 200,
-      body: {
-        success: true,
-        accessToken: 'new-token',
-        refreshToken: 'new-refresh-token'
-      }
-    }).as('refreshToken');
-
-    window.localStorage.setItem('refreshToken', 'fake-refresh-token');
-    cy.setCookie('accessToken', 'fake-access-token');
+    // Устанавливаем авторизацию
+    cy.setCookie('accessToken', 'test-access-token');
+    localStorage.setItem('refreshToken', 'test-refresh-token');
 
     cy.visit('/');
-    cy.wait(['@getIngredients', '@getUser']);
+    cy.wait('@getIngredients');
+    cy.wait('@getUser');
   });
 
-  afterEach(() => {
-    window.localStorage.removeItem('refreshToken');
-    cy.clearCookies();
-  });
+  it('Должен создавать заказ', () => {
+    const dataTransfer = new DataTransfer();
 
-  it('Должен создавать заказ и сбрасывать конструктор', () => {
-    cy.get('[data-testid="ingredient-item"]').should('have.length.gt', 0);
-
-    cy.get('[data-testid="ingredient-bun"]').first().trigger('dragstart');
+    // Добавляем булку
+    cy.get('[data-testid="ingredient-bun"]').first().as('bun');
+    cy.get('@bun').trigger('dragstart', { dataTransfer });
     cy.get('[data-testid="constructor-dropzone"]')
-      .trigger('drop')
+      .trigger('drop', { dataTransfer })
       .trigger('dragend');
 
-    cy.get('[data-testid="ingredient-main"]').first().trigger('dragstart');
-    cy.get('[data-testid="constructor-dropzone"]')
-      .trigger('drop')
-      .trigger('dragend');
+    // Проверяем булки
+    cy.get('[data-testid="constructor-bun-top-element"]').should('exist');
+    cy.get('[data-testid="constructor-bun-bottom-element"]').should('exist');
 
-    cy.get('[data-testid="constructor-bun"]').should('exist');
-    cy.get('[data-testid="constructor-filling"]').should('exist');
+    // Оформляем заказ
+    cy.get('[data-testid="order-button"]').should('be.enabled').click();
 
-    cy.get('button').contains('Оформить заказ').click();
-
-    cy.wait('@createOrder');
-    cy.get('[data-testid="modal"]').should('be.visible');
+    // Проверяем модальное окно
+    cy.get('[data-testid="order-modal"]').should('be.visible');
     cy.get('[data-testid="order-number"]').should('contain', '12345');
 
-    cy.get('[data-testid="modal-close"]').click();
-    cy.get('[data-testid="modal"]').should('not.exist');
+    // Закрываем модальное окно
+    cy.get('[data-testid="modal-close-button"]').click();
+    cy.get('[data-testid="order-modal"]').should('not.exist');
 
-    cy.get('[data-testid="constructor-bun"]').should('not.exist');
-    cy.get('[data-testid="constructor-filling"]').should('not.exist');
+    // Проверяем очистку конструктора
+    cy.get('[data-testid="constructor-bun-top-element"]').should('not.exist');
   });
 });

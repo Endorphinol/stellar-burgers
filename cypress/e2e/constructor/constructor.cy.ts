@@ -1,33 +1,47 @@
 describe('Конструктор бургера', () => {
   beforeEach(() => {
-    cy.intercept('GET', 'https://norma.nomoreparties.space/api/ingredients', {
+    cy.intercept('GET', '**/api/ingredients', {
       fixture: 'ingredients.json'
     }).as('getIngredients');
 
+    cy.intercept('GET', '**/api/auth/user', {
+      fixture: 'user.json'
+    }).as('getUser');
+
+    cy.setCookie('accessToken', 'test-access-token');
+    localStorage.setItem('refreshToken', 'test-refresh-token');
+
     cy.visit('/');
-    cy.wait('@getIngredients');
+    cy.wait(['@getIngredients', '@getUser']);
   });
 
-  afterEach(() => {
-    window.localStorage.removeItem('refreshToken');
-    cy.clearCookies();
-  });
+  it('Должен добавлять булку в конструктор', () => {
+    cy.get('[data-testid^="ingredient-"]').should('have.length.gt', 0);
+    cy.get('[data-testid-type="bun"]').as('buns').should('have.length.gt', 0);
+    cy.get('@buns').first().as('selectedBun');
+    cy.get('@selectedBun').then(($bun) => {
+      const bunName = $bun.find('[data-testid="ingredient-name"]').text();
+      const dataTransfer = new DataTransfer();
 
-  it('Должен добавлять булку и начинку в конструктор', () => {
-    cy.get('[data-testid="ingredient-bun"]').first().as('bun');
-    cy.get('[data-testid="ingredient-main"]').first().as('main');
+      cy.wrap($bun).trigger('dragstart', { dataTransfer, force: true });
 
-    cy.get('@bun').trigger('dragstart');
-    cy.get('[data-testid="constructor-dropzone"]')
-      .trigger('drop')
-      .trigger('dragend');
+      cy.get('[data-testid="constructor-dropzone"]')
+        .trigger('dragover', { force: true })
+        .trigger('drop', {
+          dataTransfer,
+          force: true
+        })
+        .trigger('dragend', { force: true });
 
-    cy.get('@main').trigger('dragstart');
-    cy.get('[data-testid="constructor-dropzone"]')
-      .trigger('drop')
-      .trigger('dragend');
+      cy.get('[data-testid="constructor-bun-top-element"]')
+        .should('exist')
+        .and('contain', bunName)
+        .and('contain', '(верх)');
 
-    cy.get('[data-testid="constructor-bun"]').should('exist');
-    cy.get('[data-testid="constructor-filling"]').should('exist');
+      cy.get('[data-testid="constructor-bun-bottom-element"]')
+        .should('exist')
+        .and('contain', bunName)
+        .and('contain', '(низ)');
+    });
   });
 });

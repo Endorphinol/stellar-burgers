@@ -18,7 +18,10 @@ export const BurgerConstructorUI: FC<BurgerConstructorUIProps> = ({
   onOrderClick,
   onClose
 }) => (
-  <section className={styles.burger_constructor}>
+  <section
+    className={styles.burger_constructor}
+    data-testid='constructor-dropzone'
+  >
     {constructorItems.bun ? (
       <div className={`${styles.element} mb-4 mr-4`}>
         <ConstructorElement
@@ -27,6 +30,7 @@ export const BurgerConstructorUI: FC<BurgerConstructorUIProps> = ({
           text={`${constructorItems.bun.name} (верх)`}
           price={constructorItems.bun.price}
           thumbnail={constructorItems.bun.image}
+          data-testid='constructor-bun-top-element'
         />
       </div>
     ) : (
@@ -36,7 +40,7 @@ export const BurgerConstructorUI: FC<BurgerConstructorUIProps> = ({
         Выберите булки
       </div>
     )}
-    <ul className={styles.elements}>
+    <ul className={styles.elements} data-testid='constructor-fillings'>
       {constructorItems.ingredients.length > 0 ? (
         constructorItems.ingredients.map(
           (item: TConstructorIngredient, index: number) => (
@@ -45,6 +49,7 @@ export const BurgerConstructorUI: FC<BurgerConstructorUIProps> = ({
               index={index}
               totalItems={constructorItems.ingredients.length}
               key={item.uuid}
+              data-testid='constructor-filling'
             />
           )
         )
@@ -64,6 +69,7 @@ export const BurgerConstructorUI: FC<BurgerConstructorUIProps> = ({
           text={`${constructorItems.bun.name} (низ)`}
           price={constructorItems.bun.price}
           thumbnail={constructorItems.bun.image}
+          data-testid='constructor-bun-bottom-element'
         />
       </div>
     ) : (
@@ -84,18 +90,16 @@ export const BurgerConstructorUI: FC<BurgerConstructorUIProps> = ({
         size='large'
         children='Оформить заказ'
         onClick={onOrderClick}
+        data-testid='order-button'
       />
     </div>
 
-    {orderRequest && (
-      <Modal onClose={onClose} title={'Оформляем заказ...'}>
-        <Preloader />
-      </Modal>
-    )}
-
     {orderModalData && (
-      <Modal onClose={onClose} title={orderRequest ? 'Оформляем заказ...' : ''}>
-        <OrderDetailsUI orderNumber={orderModalData.number} />
+      <Modal onClose={onClose} data-testid='order-modal'>
+        <OrderDetailsUI
+          data-testid='order-details'
+          orderNumber={orderModalData.number}
+        />
       </Modal>
     )}
   </section>
