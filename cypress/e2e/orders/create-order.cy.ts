@@ -3,6 +3,7 @@ describe('Создание заказа', () => {
     cy.intercept('GET', 'api/ingredients', { fixture: 'ingredients.json' }).as(
       'getIngredients'
     );
+
     cy.intercept('POST', 'api/orders', { fixture: 'order.json' }).as(
       'createOrder'
     );

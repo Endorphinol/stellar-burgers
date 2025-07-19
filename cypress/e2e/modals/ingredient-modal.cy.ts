@@ -1,13 +1,14 @@
 describe('Модальное окно ингридента', () => {
+  beforeEach(() => {
+    cy.intercept('GET', 'api/ingredients', { fixture: 'ingredients.json' }).as(
+      'getIngredients'
+    );
+    cy.visit('/');
+  });
   afterEach(() => {
     window.localStorage.removeItem('refreshToken');
     cy.clearCookies();
   });
-  beforeEach(() => {
-    cy.intercept('GET', 'api/ingredients', { fixture: 'ingredients.json' });
-    cy.visit('/');
-  });
-
   test('Должно происходить и закрытие модального окна', () => {
     cy.get('[data-testid="ingredient"]').first().click();
     cy.get('[data-testid="modal"]').should('exist');
