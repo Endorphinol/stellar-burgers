@@ -20,33 +20,62 @@ const mockIngredient: TConstructorIngredient = {
   uuid: '123'
 };
 
+const mockBun: TConstructorIngredient = {
+  ...mockIngredient,
+  _id: '2',
+  type: 'bun',
+  name: 'Bun'
+};
+
 const initialState = {
   bun: null,
   ingredients: [mockIngredient],
-  status: 'idle'
+  status: 'idle' as const
 };
 
 describe('Тестирование ConstructSlice', () => {
   test('Должен обрабатываться moveIngredient', () => {
     const initialState = {
       bun: null,
-      ingredients: [{ uuid: '1' }, { uuid: '2' }],
-      status: 'idle'
+      ingredients: [mockIngredient, { ...mockIngredient, uuid: '2' }],
+      status: 'idle' as const
     };
     const action = moveIngredient({ fromIndex: 0, toIndex: 1 });
     const state = constructSlice.reducer(initialState, action);
-    expect(state.ingredients).toEqual([{ uuid: '2' }, { uuid: '1' }]);
+    expect(state.ingredients[0].uuid).toBe('2');
+    expect(state.ingredients[1].uuid).toBe('123');
   });
+
   test('Должен обрабатываться addIngredient для булки', () => {
-    const bun = { ...mockIngredient, type: 'bun' };
-    const state = constructSlice.reducer(initialState, addIngredient(bun));
-    expect(state.bun).toEqual(bun);
+    const action = addIngredient(mockBun);
+    const state = constructSlice.reducer(initialState, action);
+    expect(state.bun).toEqual(mockBun);
   });
+
+  test('Должен обрабатываться addIngredient для начинки', () => {
+    const action = addIngredient(mockIngredient);
+    const state = constructSlice.reducer(initialState, action);
+    expect(state.ingredients).toContainEqual(mockIngredient);
+  });
+
   test('Должен обрабатываться removeIngredient', () => {
-    const state = constructSlice.reducer(
-      initialState,
-      removeIngredient(mockIngredient.uuid)
-    );
+    const stateWithIngredient = {
+      ...initialState,
+      ingredients: [mockIngredient]
+    };
+    const action = removeIngredient(mockIngredient.uuid);
+    const state = constructSlice.reducer(stateWithIngredient, action);
     expect(state.ingredients).toEqual([]);
+  });
+
+  test('Должен обрабатываться clearConstructor', () => {
+    const stateWithData = {
+      bun: mockBun,
+      ingredients: [mockIngredient],
+      status: 'idle' as const
+    };
+    const action = constructSlice.actions.clearConstructor();
+    const state = constructSlice.reducer(stateWithData, action);
+    expect(state).toEqual(initialState);
   });
 });
