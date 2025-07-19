@@ -13,7 +13,6 @@ describe('Тестирование модального окна ингреди�
     cy.visit('/');
     cy.wait(['@getIngredients', '@getUser']);
 
-    // Ждем появления хотя бы одного ингредиента вместо проверки класса
     cy.get('[data-testid^="ingredient-"]', { timeout: 10000 }).should('exist');
   });
 

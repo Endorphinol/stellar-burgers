@@ -25,29 +25,23 @@ describe('Создание заказа', () => {
   it('Должен создавать заказ', () => {
     const dataTransfer = new DataTransfer();
 
-    // Добавляем булку
     cy.get('[data-testid="ingredient-bun"]').first().as('bun');
     cy.get('@bun').trigger('dragstart', { dataTransfer });
     cy.get('[data-testid="constructor-dropzone"]')
       .trigger('drop', { dataTransfer })
       .trigger('dragend');
 
-    // Проверяем булки
     cy.get('[data-testid="constructor-bun-top-element"]').should('exist');
     cy.get('[data-testid="constructor-bun-bottom-element"]').should('exist');
 
-    // Оформляем заказ
     cy.get('[data-testid="order-button"]').should('be.enabled').click();
 
-    // Проверяем модальное окно
     cy.get('[data-testid="order-modal"]').should('be.visible');
     cy.get('[data-testid="order-number"]').should('contain', '12345');
 
-    // Закрываем модальное окно
     cy.get('[data-testid="modal-close-button"]').click();
     cy.get('[data-testid="order-modal"]').should('not.exist');
 
-    // Проверяем очистку конструктора
     cy.get('[data-testid="constructor-bun-top-element"]').should('not.exist');
   });
 });
