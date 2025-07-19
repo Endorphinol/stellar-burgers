@@ -1,8 +1,9 @@
 describe('Конструктор бургера', () => {
   beforeEach(() => {
-    cy.intercept('GET', '/api/ingredients', {
+    cy.intercept('GET', 'https://norma.nomoreparties.space/api/ingredients', {
       fixture: 'ingredients.json'
     }).as('getIngredients');
+
     cy.visit('/');
     cy.wait('@getIngredients');
   });
@@ -13,18 +14,19 @@ describe('Конструктор бургера', () => {
   });
 
   it('Должен добавлять булку и начинку в конструктор', () => {
-    cy.get('[data-testid="ingredient-bun"]')
-      .first()
-      .trigger('dragstart')
-      .get('[data-testid="constructor-dropzone"]')
+    cy.get('[data-testid="ingredient-bun"]').first().as('bun');
+    cy.get('[data-testid="ingredient-main"]').first().as('main');
+
+    cy.get('@bun').trigger('dragstart');
+    cy.get('[data-testid="constructor-dropzone"]')
       .trigger('drop')
       .trigger('dragend');
-    cy.get('[data-testid="ingredient-main"]')
-      .first()
-      .trigger('dragstart')
-      .get('[data-testid="constructor-dropzone"]')
+
+    cy.get('@main').trigger('dragstart');
+    cy.get('[data-testid="constructor-dropzone"]')
       .trigger('drop')
       .trigger('dragend');
+
     cy.get('[data-testid="constructor-bun"]').should('exist');
     cy.get('[data-testid="constructor-filling"]').should('exist');
   });

@@ -1,4 +1,16 @@
 {
   "success": true,
-  "orders": []
+  "name": "Флюоресцентный бургер",
+  "order": {
+    "number": 12345,
+    "ingredients": [
+      { "_id": "60d3b41abdacab0026a733c6" },
+      { "_id": "60d3b41abdacab0026a733c8" }
+    ],
+    "status": "done",
+    "name": "Флюоресцентный бургер",
+    "createdAt": "2023-07-19T14:00:00.000Z",
+    "updatedAt": "2023-07-19T14:01:00.000Z",
+    "price": 2243
+  }
 }
