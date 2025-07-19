@@ -9,7 +9,7 @@ import {
 import { TBurgerIngredientUIProps } from './type';
 
 export const BurgerIngredientUI: FC<TBurgerIngredientUIProps> = memo(
-  ({ ingredient, count, handleAdd, locationState }) => {
+  ({ ingredient, count, handleAdd, locationState, ...props }) => {
     const { image, price, name, _id, type } = ingredient;
 
     const handleDragStart = (e: React.DragEvent<HTMLLIElement>) => {
@@ -19,7 +19,7 @@ export const BurgerIngredientUI: FC<TBurgerIngredientUIProps> = memo(
 
     return (
       <li
-        data-testid={`ingredient-${ingredient._id}`}
+        {...props}
         data-testid-type={ingredient.type}
         draggable
         onDragStart={handleDragStart}
