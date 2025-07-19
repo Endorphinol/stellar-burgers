@@ -7,7 +7,7 @@ describe('Создание заказа', () => {
     cy.intercept('POST', 'api/orders', {
       statusCode: 500,
       body: { message: 'Server error' }
-    }).as('createOrderError');
+    }).as('createOrder');
 
     cy.intercept('GET', 'api/auth/user', { fixture: 'user.json' }).as(
       'getUser'
@@ -41,7 +41,6 @@ describe('Создание заказа', () => {
       .trigger('dragend');
 
     cy.get('button').contains('Оформить заказ').click();
-
     cy.wait('@createOrder').then(() => {
       cy.get('[data-testid="order-number"]').should('contain', '12345');
       cy.get('[data-testid="modal-close"]').click();
