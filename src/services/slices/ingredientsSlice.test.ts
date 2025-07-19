@@ -23,14 +23,14 @@ const initialState = {
 };
 
 describe('Тестирование ingredientsSlice', () => {
-  it('Должен обрабатываться fetchIngredients.pending', () => {
+  test('Должен обрабатываться fetchIngredients.pending', () => {
     const action = { type: fetchIngredients.pending.type };
     const state = ingredientsSlice.reducer(initialState, action);
     expect(state.loading).toBe(true);
     expect(state.error).toBeNull();
   });
 
-  it('Должен обрабатываться fetchIngredients.fulfilled', () => {
+  test('Должен обрабатываться fetchIngredients.fulfilled', () => {
     const action = {
       type: fetchIngredients.fulfilled.type,
       payload: [mockIngredient]
@@ -41,7 +41,7 @@ describe('Тестирование ingredientsSlice', () => {
     expect(state.error).toBeNull();
   });
 
-  it('Должен обрабатываться fetchIngredients.rejected', () => {
+  test('Должен обрабатываться fetchIngredients.rejected', () => {
     const error = { message: 'Ошибка загрузки' };
     const action = {
       type: fetchIngredients.rejected.type,
