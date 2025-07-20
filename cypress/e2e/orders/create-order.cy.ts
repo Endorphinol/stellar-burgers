@@ -1,6 +1,5 @@
 describe('Создание заказа', () => {
   beforeEach(() => {
-    // Мокируем API и устанавливаем тестовые данные
     cy.intercept('GET', '**/api/ingredients', { fixture: 'ingredients.json' });
     cy.intercept('GET', '**/api/auth/user', { fixture: 'user.json' });
 
@@ -23,57 +22,48 @@ describe('Создание заказа', () => {
   });
 
   it('Должен создавать заказ с булкой и начинкой', () => {
-    // Добавляем булку (верх)
-    cy.get('[data-testid="ingredient-bun"]')
-      .first()
-      .within(() => {
-        cy.get('[data-testid="ingredient-add-container"]').click();
-      });
+    // Добавление ингредиентов
+    cy.get('[data-testid="ingredient-bun"]').first().click();
+    cy.get('[data-testid="ingredient-main"]').first().click();
 
-    // Добавляем начинку
-    cy.get('[data-testid="ingredient-main"]')
-      .first()
-      .within(() => {
-        cy.get('[data-testid="ingredient-add-container"]').click();
-      });
+    // Проверка конструктора перед заказом
+    cy.get('[data-testid="constructor-bun-top"]').should('exist');
+    cy.get('[data-testid="constructor-ingredient"]').should('have.length', 1);
+    cy.get('[data-testid="order-button"]').should('not.be.disabled');
 
-    // Мокаем создание заказа
+    // Мок создания заказа
     cy.intercept('POST', '**/api/orders', {
       statusCode: 200,
       body: { success: true, name: 'Тестовый бургер', order: { number: 12345 } }
     }).as('createOrder');
 
-    // Оформляем заказ
-    cy.get('[data-testid="order-button"]').should('not.be.disabled').click();
+    // Оформление заказа
+    cy.get('[data-testid="order-button"]').click();
 
-    // Проверяем модальное окно
+    // Проверка модального окна
     cy.get('[data-testid="order-modal"]').should('exist');
     cy.get('[data-testid="order-number"]').should('contain', '12345');
 
-    // Проверяем очистку конструктора
-    cy.get('[data-testid="constructor-bun-top-element"]').should(
-      'contain',
-      'Выберите булки'
-    );
-    cy.get('[data-testid="constructor-fillings"]').should(
-      'contain',
-      'Выберите начинку'
-    );
-  });
+    // Закрытие модального окна
+    cy.get('[data-testid="modal-overlay"]').click({ force: true });
+    cy.get('[data-testid="order-modal"]').should('not.exist');
 
+    // Проверка очистки конструктора
+    cy.get('[data-testid="constructor-bun-top"]').should('not.exist');
+    cy.get('[data-testid="constructor-ingredient"]').should('not.exist');
+  });
+  
   it('Должен перенаправлять на логин при попытке создать заказ без авторизации', () => {
     cy.clearCookie('accessToken');
     localStorage.removeItem('refreshToken');
     cy.intercept('GET', '**/api/auth/user', { statusCode: 401 });
 
-    // Добавляем булку (верх)
     cy.get('[data-testid="ingredient-bun"]')
       .first()
       .within(() => {
         cy.get('[data-testid="ingredient-add-container"]').click();
       });
 
-    // Добавляем начинку
     cy.get('[data-testid="ingredient-main"]')
       .first()
       .within(() => {
