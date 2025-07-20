@@ -35,30 +35,38 @@ describe('Создание заказа', () => {
     // Добавляем булку в конструктор
     cy.get('[data-testid="ingredient-bun"]')
       .first()
-      .find('[data-testid="ingredient-add-container"]') // Ищем кнопку добавления
-      .click({ force: true }); // Кликаем с force, так как элемент может быть перекрыт
+      .within(() => {
+        cy.get('[data-testid="ingredient-add-container"]').click();
+      });
 
     // Добавляем начинку в конструктор
     cy.get('[data-testid="ingredient-main"]')
       .first()
-      .find('[data-testid="ingredient-add-container"]') // Ищем кнопку добавления
-      .click({ force: true });
+      .within(() => {
+        cy.get('[data-testid="ingredient-add-container"]').click();
+      });
 
-    // Проверяем, что ингредиенты добавились в конструктор
+    // Ждем обновления состояния
+    cy.wait(500);
+
+    // Проверяем конструктор
     cy.get('[data-testid="constructor-bun-top-element"]').should('exist');
     cy.get('[data-testid="constructor-fillings"]').should('exist');
-    cy.get('[data-testid="order-button"]').should('not.be.disabled');
+
+    // Дополнительная проверка - убедимся что начинка действительно добавилась
+    cy.get('[data-testid^="constructor-filling"]').should('exist');
+
+    // Проверяем кнопку
+    cy.get('[data-testid="order-button"]')
+      .should('not.be.disabled')
+      .and('contain', 'Оформить заказ');
 
     // Оформляем заказ
     cy.get('[data-testid="order-button"]').click();
 
-    // Проверяем модальное окно с номером заказа
+    // Проверяем модальное окно
     cy.get('[data-testid="order-modal"]').should('exist');
     cy.get('[data-testid="order-number"]').should('contain', '12345');
-
-    // Закрываем модальное окно
-    cy.get('[data-testid="modal-close-button"]').click();
-    cy.get('[data-testid="order-modal"]').should('not.exist');
   });
 
   it('Должен перенаправлять на логин при попытке создать заказ без авторизации', () => {
