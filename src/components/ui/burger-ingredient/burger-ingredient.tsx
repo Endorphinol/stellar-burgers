@@ -10,30 +10,13 @@ import { TBurgerIngredientUIProps } from './type';
 
 export const BurgerIngredientUI: FC<TBurgerIngredientUIProps> = memo(
   ({ ingredient, count, handleAdd, locationState, ...props }) => {
-    const { image, price, name, _id, type } = ingredient;
-
-    const handleDragStart = (e: React.DragEvent<HTMLLIElement>) => {
-      const dataTransfer = e.dataTransfer;
-      const dragData = {
-        _id: _id,
-        type: type,
-        name: name,
-        price: price,
-        image: image
-      };
-      dataTransfer.setData('ingredient', JSON.stringify(dragData));
-      dataTransfer.effectAllowed = 'copyMove';
-      e.currentTarget.classList.add(styles.dragging);
-    };
+    const { image, price, name, _id } = ingredient;
 
     return (
       <li
         {...props}
         data-testid={`ingredient-${ingredient.type}`}
         data-testid-type={ingredient.type}
-        data-ingredient={JSON.stringify(ingredient)}
-        draggable
-        onDragStart={handleDragStart}
       >
         <Link
           className={styles.article}
@@ -48,26 +31,19 @@ export const BurgerIngredientUI: FC<TBurgerIngredientUIProps> = memo(
             alt={`Изображение ${name}`}
             data-testid={`ingredient-image`}
           />
-          <div
-            className={`${styles.cost} mt-2 mb-2`}
-            data-testid='ingredient-price'
-          >
+          <div className={`${styles.cost} mt-2 mb-2`}>
             <p className='text text_type_digits-default mr-2'>{price}</p>
-            <CurrencyIcon type='primary' />
+            <CurrencyIcon type={'primary'} />
           </div>
-          <p
-            className={`text text_type_main-default ${styles.text}`}
-            data-testid='ingredient-name'
-          >
-            {name}
-          </p>
+          <p className={`text text_type_main-default ${styles.text}`}>{name}</p>
         </Link>
-        <AddButton
-          text='Добавить'
-          onClick={handleAdd}
-          extraClass={`${styles.addButton} mt-8`}
-          data-testid='ingredient-add-button'
-        />
+        <div data-testid='ingredient-add-container'>
+          <AddButton
+            text='Добавить'
+            onClick={handleAdd}
+            extraClass={`${styles.addButton} mt-8`}
+          />
+        </div>
       </li>
     );
   }

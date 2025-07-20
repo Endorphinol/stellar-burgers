@@ -44,6 +44,7 @@ export const BurgerConstructorUI: FC<BurgerConstructorUIProps> = ({
         Выберите булки
       </div>
     )}
+
     <ul className={styles.elements} data-testid='constructor-fillings'>
       {constructorItems.ingredients.length > 0 ? (
         constructorItems.ingredients.map(
@@ -66,6 +67,7 @@ export const BurgerConstructorUI: FC<BurgerConstructorUIProps> = ({
         </div>
       )}
     </ul>
+
     {constructorItems.bun ? (
       <div
         className={`${styles.element} mt-4 mr-4`}
@@ -87,6 +89,7 @@ export const BurgerConstructorUI: FC<BurgerConstructorUIProps> = ({
         Выберите булки
       </div>
     )}
+
     <div className={`${styles.total} mt-10 mr-4`}>
       <div className={`${styles.cost} mr-10`}>
         <p className={`text ${styles.text} mr-2`}>{price}</p>
@@ -96,14 +99,23 @@ export const BurgerConstructorUI: FC<BurgerConstructorUIProps> = ({
         htmlType='button'
         type='primary'
         size='large'
-        children='Оформить заказ'
         onClick={onOrderClick}
         data-testid='order-button'
         disabled={
-          !constructorItems.bun || constructorItems.ingredients.length === 0
+          !constructorItems.bun ||
+          constructorItems.ingredients.length === 0 ||
+          orderRequest
         }
-      />
+      >
+        Оформить заказ
+      </Button>
     </div>
+
+    {orderRequest && (
+      <Modal onClose={onClose} data-testid='loader-modal'>
+        <Preloader />
+      </Modal>
+    )}
 
     {orderModalData && (
       <Modal onClose={onClose} data-testid='order-modal'>
