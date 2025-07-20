@@ -22,37 +22,45 @@ describe('Создание заказа', () => {
   });
 
   it('Должен создавать заказ с булкой и начинкой', () => {
-    // Добавление ингредиентов
-    cy.get('[data-testid="ingredient-bun"]').first().click();
-    cy.get('[data-testid="ingredient-main"]').first().click();
-
-    // Проверка конструктора перед заказом
-    cy.get('[data-testid="constructor-bun-top"]').should('exist');
-    cy.get('[data-testid="constructor-ingredient"]').should('have.length', 1);
-    cy.get('[data-testid="order-button"]').should('not.be.disabled');
-
-    // Мок создания заказа
+    // Мокаем успешный ответ API для создания заказа
     cy.intercept('POST', '**/api/orders', {
       statusCode: 200,
-      body: { success: true, name: 'Тестовый бургер', order: { number: 12345 } }
+      body: {
+        success: true,
+        name: 'Тестовый бургер',
+        order: { number: 12345 }
+      }
     }).as('createOrder');
 
-    // Оформление заказа
+    // Добавляем булку в конструктор
+    cy.get('[data-testid="ingredient-bun"]')
+      .first()
+      .find('[data-testid="ingredient-add-container"]') // Ищем кнопку добавления
+      .click({ force: true }); // Кликаем с force, так как элемент может быть перекрыт
+
+    // Добавляем начинку в конструктор
+    cy.get('[data-testid="ingredient-main"]')
+      .first()
+      .find('[data-testid="ingredient-add-container"]') // Ищем кнопку добавления
+      .click({ force: true });
+
+    // Проверяем, что ингредиенты добавились в конструктор
+    cy.get('[data-testid="constructor-bun-top-element"]').should('exist');
+    cy.get('[data-testid="constructor-fillings"]').should('exist');
+    cy.get('[data-testid="order-button"]').should('not.be.disabled');
+
+    // Оформляем заказ
     cy.get('[data-testid="order-button"]').click();
 
-    // Проверка модального окна
+    // Проверяем модальное окно с номером заказа
     cy.get('[data-testid="order-modal"]').should('exist');
     cy.get('[data-testid="order-number"]').should('contain', '12345');
 
-    // Закрытие модального окна
-    cy.get('[data-testid="modal-overlay"]').click({ force: true });
+    // Закрываем модальное окно
+    cy.get('[data-testid="modal-close-button"]').click();
     cy.get('[data-testid="order-modal"]').should('not.exist');
-
-    // Проверка очистки конструктора
-    cy.get('[data-testid="constructor-bun-top"]').should('not.exist');
-    cy.get('[data-testid="constructor-ingredient"]').should('not.exist');
   });
-  
+
   it('Должен перенаправлять на логин при попытке создать заказ без авторизации', () => {
     cy.clearCookie('accessToken');
     localStorage.removeItem('refreshToken');

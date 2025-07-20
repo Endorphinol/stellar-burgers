@@ -19,22 +19,13 @@ describe('Конструктор бургера', () => {
     // Проверяем что ингредиенты загрузились
     cy.get('[data-testid^="ingredient-"]').should('have.length.at.least', 2);
 
-    // Находим первую булку
-    cy.get('[data-testid-type="bun"]').first().as('bun');
+    // Находим и добавляем первую булку через кнопку
+    cy.get('[data-testid="ingredient-bun"]')
+      .first()
+      .find('[data-testid="ingredient-add-container"]')
+      .click();
 
-    // Добавляем булку через drag-and-drop (так как кнопка может быть скрыта)
-    cy.get('@bun').then(($el) => {
-      const dataTransfer = new DataTransfer();
-      const ingredient = JSON.parse($el.attr('data-ingredient') || '{}');
-      dataTransfer.setData('ingredient', JSON.stringify(ingredient));
-
-      cy.wrap($el).trigger('dragstart', { dataTransfer });
-      cy.get('[data-testid="constructor-dropzone"]')
-        .trigger('drop', { dataTransfer })
-        .trigger('dragend');
-    });
-
-    // Проверяем что булка добавлена
+    // Проверяем что булка добавлена в конструктор
     cy.get('[data-testid="constructor-bun-top-element"]').should('exist');
     cy.get('[data-testid="constructor-bun-bottom-element"]').should('exist');
   });

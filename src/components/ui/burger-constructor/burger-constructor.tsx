@@ -18,10 +18,7 @@ export const BurgerConstructorUI: FC<BurgerConstructorUIProps> = ({
   onOrderClick,
   onClose
 }) => (
-  <section
-    className={styles.burger_constructor}
-    data-testid='constructor-dropzone'
-  >
+  <section className={styles.burger_constructor}>
     {constructorItems.bun ? (
       <div
         className={`${styles.element} mb-4 mr-4`}
@@ -33,7 +30,6 @@ export const BurgerConstructorUI: FC<BurgerConstructorUIProps> = ({
           text={`${constructorItems.bun.name} (верх)`}
           price={constructorItems.bun.price}
           thumbnail={constructorItems.bun.image}
-          data-testid='bun-top-text'
         />
       </div>
     ) : (
@@ -54,7 +50,7 @@ export const BurgerConstructorUI: FC<BurgerConstructorUIProps> = ({
               index={index}
               totalItems={constructorItems.ingredients.length}
               key={item.uuid}
-              data-testid='constructor-filling'
+              data-testid={`constructor-filling-${index}`}
             />
           )
         )
@@ -112,16 +108,19 @@ export const BurgerConstructorUI: FC<BurgerConstructorUIProps> = ({
     </div>
 
     {orderRequest ? (
-      <Modal
-        onClose={onClose}
-        data-testid='loader-modal'
-        title={'Оформляем заказ...'}
-      >
-        <Preloader />
+      <Modal onClose={onClose} title={'Оформляем заказ...'}>
+        <div data-testid='loader-modal'>
+          <Preloader />
+        </div>
       </Modal>
     ) : orderModalData ? (
-      <Modal onClose={onClose} data-testid='order-modal'>
-        <OrderDetailsUI orderNumber={orderModalData.number} />
+      <Modal onClose={onClose}>
+        <div data-testid='order-modal'>
+          <OrderDetailsUI
+            orderNumber={orderModalData.number}
+            data-testid='order-number'
+          />
+        </div>
       </Modal>
     ) : null}
   </section>
