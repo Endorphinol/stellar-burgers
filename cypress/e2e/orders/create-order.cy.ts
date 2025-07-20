@@ -22,7 +22,6 @@ describe('Создание заказа', () => {
   });
 
   it('Должен создавать заказ с булкой и начинкой', () => {
-    // Мокаем успешный ответ API для создания заказа
     cy.intercept('POST', '**/api/orders', {
       statusCode: 200,
       body: {
@@ -32,39 +31,31 @@ describe('Создание заказа', () => {
       }
     }).as('createOrder');
 
-    // Добавляем булку в конструктор
     cy.get('[data-testid="ingredient-bun"]')
       .first()
       .within(() => {
         cy.get('[data-testid="ingredient-add-container"]').click();
       });
 
-    // Добавляем начинку в конструктор
     cy.get('[data-testid="ingredient-main"]')
       .first()
       .within(() => {
         cy.get('[data-testid="ingredient-add-container"]').click();
       });
 
-    // Ждем обновления состояния
     cy.wait(500);
 
-    // Проверяем конструктор
     cy.get('[data-testid="constructor-bun-top-element"]').should('exist');
     cy.get('[data-testid="constructor-fillings"]').should('exist');
 
-    // Дополнительная проверка - убедимся что начинка действительно добавилась
     cy.get('[data-testid^="constructor-filling"]').should('exist');
 
-    // Проверяем кнопку
     cy.get('[data-testid="order-button"]')
       .should('not.be.disabled')
       .and('contain', 'Оформить заказ');
 
-    // Оформляем заказ
     cy.get('[data-testid="order-button"]').click();
 
-    // Проверяем модальное окно
     cy.get('[data-testid="order-modal"]').should('exist');
     cy.get('[data-testid="order-number"]').should('contain', '12345');
   });

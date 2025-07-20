@@ -16,16 +16,13 @@ describe('Конструктор бургера', () => {
   });
 
   it('Должен добавлять булку в конструктор', () => {
-    // Проверяем что ингредиенты загрузились
     cy.get('[data-testid^="ingredient-"]').should('have.length.at.least', 2);
 
-    // Находим и добавляем первую булку через кнопку
     cy.get('[data-testid="ingredient-bun"]')
       .first()
       .find('[data-testid="ingredient-add-container"]')
       .click();
 
-    // Проверяем что булка добавлена в конструктор
     cy.get('[data-testid="constructor-bun-top-element"]').should('exist');
     cy.get('[data-testid="constructor-bun-bottom-element"]').should('exist');
   });
