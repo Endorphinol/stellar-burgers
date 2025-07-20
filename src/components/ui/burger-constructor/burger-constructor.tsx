@@ -23,19 +23,23 @@ export const BurgerConstructorUI: FC<BurgerConstructorUIProps> = ({
     data-testid='constructor-dropzone'
   >
     {constructorItems.bun ? (
-      <div className={`${styles.element} mb-4 mr-4`}>
+      <div
+        className={`${styles.element} mb-4 mr-4`}
+        data-testid='constructor-bun-top-element'
+      >
         <ConstructorElement
           type='top'
           isLocked
           text={`${constructorItems.bun.name} (верх)`}
           price={constructorItems.bun.price}
           thumbnail={constructorItems.bun.image}
-          data-testid='constructor-bun-top-element'
+          data-testid='bun-top-text'
         />
       </div>
     ) : (
       <div
         className={`${styles.noBuns} ${styles.noBunsTop} ml-8 mb-4 mr-5 text text_type_main-default`}
+        data-testid='constructor-bun-top-element'
       >
         Выберите булки
       </div>
@@ -56,25 +60,29 @@ export const BurgerConstructorUI: FC<BurgerConstructorUIProps> = ({
       ) : (
         <div
           className={`${styles.noBuns} ml-8 mb-4 mr-5 text text_type_main-default`}
+          data-testid='constructor-no-fillings'
         >
           Выберите начинку
         </div>
       )}
     </ul>
     {constructorItems.bun ? (
-      <div className={`${styles.element} mt-4 mr-4`}>
+      <div
+        className={`${styles.element} mt-4 mr-4`}
+        data-testid='constructor-bun-bottom-element'
+      >
         <ConstructorElement
           type='bottom'
           isLocked
           text={`${constructorItems.bun.name} (низ)`}
           price={constructorItems.bun.price}
           thumbnail={constructorItems.bun.image}
-          data-testid='constructor-bun-bottom-element'
         />
       </div>
     ) : (
       <div
         className={`${styles.noBuns} ${styles.noBunsBottom} ml-8 mb-4 mr-5 text text_type_main-default`}
+        data-testid='constructor-bun-bottom-element'
       >
         Выберите булки
       </div>
@@ -91,15 +99,15 @@ export const BurgerConstructorUI: FC<BurgerConstructorUIProps> = ({
         children='Оформить заказ'
         onClick={onOrderClick}
         data-testid='order-button'
+        disabled={
+          !constructorItems.bun || constructorItems.ingredients.length === 0
+        }
       />
     </div>
 
     {orderModalData && (
       <Modal onClose={onClose} data-testid='order-modal'>
-        <OrderDetailsUI
-          data-testid='order-details'
-          orderNumber={orderModalData.number}
-        />
+        <OrderDetailsUI orderNumber={orderModalData.number} />
       </Modal>
     )}
   </section>

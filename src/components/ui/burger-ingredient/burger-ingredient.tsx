@@ -13,14 +13,25 @@ export const BurgerIngredientUI: FC<TBurgerIngredientUIProps> = memo(
     const { image, price, name, _id, type } = ingredient;
 
     const handleDragStart = (e: React.DragEvent<HTMLLIElement>) => {
-      e.dataTransfer.setData('text/plain', JSON.stringify(ingredient));
-      e.dataTransfer.effectAllowed = 'move';
+      const dataTransfer = e.dataTransfer;
+      const dragData = {
+        _id: _id,
+        type: type,
+        name: name,
+        price: price,
+        image: image
+      };
+      dataTransfer.setData('ingredient', JSON.stringify(dragData));
+      dataTransfer.effectAllowed = 'copyMove';
+      e.currentTarget.classList.add(styles.dragging);
     };
 
     return (
       <li
         {...props}
+        data-testid={`ingredient-${ingredient.type}`}
         data-testid-type={ingredient.type}
+        data-ingredient={JSON.stringify(ingredient)}
         draggable
         onDragStart={handleDragStart}
       >
