@@ -65,6 +65,8 @@ describe('Создание заказа', () => {
     localStorage.removeItem('refreshToken');
     cy.intercept('GET', '**/api/auth/user', { statusCode: 401 });
 
+    cy.visit('/');
+
     cy.get('[data-testid="ingredient-bun"]')
       .first()
       .within(() => {
