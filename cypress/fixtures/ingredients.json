@@ -1,0 +1,26 @@
+{
+  "success": true,
+  "data": [
+    {
+      "_id": "60d3b41abdacab0026a733c6",
+      "name": "Краторная булка N-200i",
+      "type": "bun",
+      "price": 1255,
+      "image": "https://code.s3.yandex.net/react/code/bun-02.png"
+    },
+    {
+      "_id": "60d3b41abdacab0026a733c7",
+      "name": "Флюоресцентная булка R2-D3",
+      "type": "bun",
+      "price": 988,
+      "image": "https://code.s3.yandex.net/react/code/bun-01.png"
+    },
+    {
+      "_id": "60d3b41abdacab0026a733c8",
+      "name": "Филе Люминесцентного тетраодонтимформа",
+      "type": "main",
+      "price": 988,
+      "image": "https://code.s3.yandex.net/react/code/meat-03.png"
+    }
+  ]
+}
